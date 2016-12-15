@@ -1,0 +1,22 @@
+{
+  "name": "bdi",
+  "homepage": "https://github.com/tflati/bdi",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Tiziano Flati"
+  ],
+  "license": "CC-BY-SA",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "https://github.com/angular/bower-material.git#^1.1.1",
+    "angular-chart.js": "https://github.com/jtblin/angular-chart.js.git#^1.1.1"
+  }
+}
