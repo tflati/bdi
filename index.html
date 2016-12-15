@@ -1,3 +1,183 @@
+<!DOCTYPE html>
 <html>
-<h1>Hello world!</h1>
+	<head>
+		<meta charset="UTF-8"> 
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+
+		<script src="bower_components/angular/angular.js"></script>
+		<script src="bower_components/angular-aria/angular-aria.js"></script>
+		<script src="bower_components/angular-animate/angular-animate.js"></script>
+		<script src="bower_components/angular-material/angular-material.js"></script>
+
+		<script src="bower_components/chart.js/dist/Chart.js"></script>
+		<script src="bower_components/angular-chart.js/angular-chart.js"></script>
+
+		<script>
+
+			angular.module( 'app', [ 'ngMaterial', 'chart.js'] )
+				.config(function($mdThemingProvider) {
+					$mdThemingProvider.theme('big-data-theme')
+					      .primaryPalette('amber')
+					      .accentPalette('red')
+					      .warnPalette('light-green');
+				})
+				.controller("controller", function($scope, $timeout, $mdSidenav){
+
+					self = this;
+
+					self.title = "Peach variant database portal";
+					self.description = "A comprehensive information of xxxxxx single nucleotide polymorphisms (SNPs) and yyyyyyy insertions/deletions (INDELs) identified from sequencing data of zzzzz peach accessions.";
+
+					$scope.items = [
+						{ name: 'Home', url: "http://www.google.it", items: [{ name: 'Sottoitem1', url: "http://www.google.it"}, { name: 'Sottoitem2', url: "http://www.google.it"}]},
+						{ name: 'SNP Information', url: "http://galaxy.cineca.it" },
+						{ name: 'INDEL Information', url: "" },
+						{ name: 'Cultivars', url: "" },
+						{ name: 'Tools', url: "" },
+						{ name: 'GBrowse', url: "" },
+						{ name: 'Documents & Downloads', url: "" },
+						{ name: 'Statistics', url: "" },
+						{ name: 'Contact', url: "" },
+					  ];
+	
+					$scope.toggleLeft = buildToggler('left');
+					$scope.toggleRight = buildToggler('right');
+
+					function buildToggler(componentId) {
+					      return function() {
+						$mdSidenav(componentId).toggle();
+					      }
+					    }
+					
+					$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+				  $scope.series = ['Series A', 'Series B'];
+				  $scope.data = [
+					[65, 59, 80, 81, 56, 55, 40],
+					[28, 48, 40, 19, 86, 27, 90]
+				  ];
+				  $scope.onClick = function (points, evt) {
+					console.log(points, evt);
+				  };
+				  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+				  $scope.options = {
+					scales: {
+					  yAxes: [
+						{
+						  id: 'y-axis-1',
+						  type: 'linear',
+						  display: true,
+						  position: 'left'
+						},
+						{
+						  id: 'y-axis-2',
+						  type: 'linear',
+						  display: true,
+						  position: 'right'
+						}
+					  ]
+					}
+				  };
+
+				  $scope.pielabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+				  $scope.piedata = [300, 500, 100];
+			
+				  $scope.histlabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+				  $scope.histseries = ['Series A', 'Series B'];
+			      $scope.histdata = [
+					  [65, 59, 80, 81, 56, 55, 40],
+					  [28, 48, 40, 19, 86, 27, 90]
+					];
+				}// End of controller
+			);
+
+		</script>
+	</head>
+	<body style="margin: 0px; font-size: 1.2em;" ng-app="app" md-theme="big-data-theme">
+
+		<div ng-controller="controller as c" layout="column" ng-cloak>
+
+		<section layout="row" flex>
+		
+			<md-sidenav class="md-sidenav-left" md-component-id="left">
+				<md-toolbar class="md-primary">
+					<h1 class="md-toolbar-tools">Menu</h1>
+			      	</md-toolbar>
+
+				<md-content>
+					<md-list-item ng-repeat="item in items" layout="column" style="align-items:left;">
+						<a ng-href="{{item.url}}"><span> {{ item.name }} </span></a>
+										<md-content>
+								<md-list-item ng-repeat="subitem in item.items">
+									<a ng-href="{{subitem.url}}"><span> {{ subitem.name }} </span></a>
+							</md-content>
+						</md-list-item>
+					</md-list-item>
+
+					<md-divider></md-divider>
+
+					<md-button ng-click="toggleLeft()" class="md-accent">Close</md-button>
+			      	</md-content>
+			</md-sidenav>		
+
+			<md-content flex layout-padding>
+				<md-card layout="row">
+					<img flex="50" ng-src="http://images.wisegeek.com/peaches-growing-in-tree.jpg" class="md-card-image" alt="Peach project image">
+
+					<md-card-title layout="column" flex="50">
+						<md-card-title-text layout="column">
+							<span class="md-headline" style="font-size: 2em;" ng-bind="c.title"></span>
+							<span class="md-subhead" ng-bind="c.description"></span>
+							<md-card-title-media layout="row" flex="auto" layout-padding>
+								<img class="md-media-sm" style="height:100px;" ng-src="http://galaxy.cineca.it/micco/fusion-form/app/assets/logo_cineca.png" alt="logo1">
+								<img class="md-media-sm" style="height:100px;" ng-src="http://www.agraria.unimi.it/images/minerva_unimi.jpg" alt="logo2">
+						</md-card-title-media>
+						</md-card-title-text>
+					</md-card-title>
+			      </md-card>
+
+			      <div layout="column" layout-align="top center">
+				<div>
+				  <md-button ng-click="toggleLeft()" class="md-raised">
+				    Toggle Sidenav
+				  </md-button>
+				</div>
+			      </div>
+
+			    </md-content>
+		</section>
+
+		<section style="padding: 0% 5% 0% 5%;">
+			<p>
+				The PeachGEV Database aims to create an interactive resource to archive and display genomic variation in Peach (P. persica L. Batsch) species. The database currently contains pre-assembled Whole-Genome Re-Sequencing data from NGS illumina library of 130 accessions.
+			</p>
+		</section>
+
+		<section layout="row" style="width:80%; margin-left: auto; margin-right: auto;">
+			<div layout="column" flex="50">
+				<md-card>
+					<canvas id="line" class="chart chart-line" chart-data="data"
+						chart-labels="labels" chart-series="series" chart-options="options"
+						chart-dataset-override="datasetOverride" chart-click="onClick">
+					</canvas>
+				</md-card>
+
+				<md-card>
+					<canvas id="doughnut" class="chart chart-doughnut"
+							chart-data="piedata" chart-labels="pielabels">
+					</canvas>
+				</md-card>
+			</div>
+
+			<div layout="column" flex="50">
+				<md-card>
+					<canvas id="base" class="chart-horizontal-bar"
+					  chart-data="histdata" chart-labels="histlabels" >
+					</canvas>
+				</md-card>
+			</div>
+
+		</section>
+		
+	</body>
 </html>
