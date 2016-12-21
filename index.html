@@ -40,26 +40,6 @@
 					      .accentPalette('red')
 					      .warnPalette('light-green');
 				})
-				.filter('keyboardShortcut', function($window) {
-					return function(str) {
-					  if (!str) return;
-					  var keys = str.split('-');
-					  var isOSX = /Mac OS X/.test($window.navigator.userAgent);
-
-					  var seperator = (!isOSX || keys.length > 2) ? '+' : '';
-
-					  var abbreviations = {
-						M: isOSX ? '⌘' : 'Ctrl',
-						A: isOSX ? 'Option' : 'Alt',
-						S: 'Shift'
-					  };
-
-					  return keys.map(function(key, index) {
-						var last = index == keys.length - 1;
-						return last ? key : abbreviations[key];
-					  }).join(seperator);
-					};
-				  })
 				.controller("controller", function($scope, $mdDialog, $timeout, $mdSidenav){
 
 					self = this;
@@ -68,15 +48,15 @@
 					self.description = "A comprehensive information of xxxxxx single nucleotide polymorphisms (SNPs) and yyyyyyy insertions/deletions (INDELs) identified from sequencing data of zzzzz peach accessions.";
 
 					$scope.items = [
-						{ name: 'Home', url: "http://www.google.it", items: [{ name: 'Sottoitem1', url: "http://www.google.it"}, { name: 'Sottoitem2', url: "http://www.google.it"}]},
-						{ name: 'SNP Information', url: "http://galaxy.cineca.it" },
-						{ name: 'INDEL Information', url: "" },
-						{ name: 'Cultivars', url: "" },
-						{ name: 'Tools', url: "" },
-						{ name: 'GBrowse', url: "" },
-						{ name: 'Documents & Downloads', url: "" },
-						{ name: 'Statistics', url: "" },
-						{ name: 'Contact', url: "" },
+						{ name: 'Home', url: "http://www.google.it"},
+						{ name: 'SNP Information', items: [{ name: 'Search for SNPs by region', url: "http://www.google.it"}, { name: 'Search for SNPs within gene', url: "http://www.google.it"}]},
+						{ name: 'INDEL Information', url: ""},
+						{ name: 'Breeds', url: "" },
+						{ name: 'Tools', url: ""},
+						{ name: 'GBrowse', url: ""},
+						{ name: 'Documents & Downloads', url: ""},
+						{ name: 'Statistics', url: ""},
+						{ name: 'Contact', url: ""},
 					  ];
 	
 					$scope.toggle = function() {
@@ -133,7 +113,8 @@
 								  left: 1500
 								})
 							);
-				  }			
+				  };
+				  $scope.pieoptions = {fontSize: 200};
 
 				  $scope.histlabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
 				  $scope.histseries = ['Series A', 'Series B'];
@@ -194,6 +175,7 @@
 
 		<div ng-controller="controller as ctrl" layout="column" ng-cloak>
 
+		<!--
 		<md-toolbar class="md-menu-toolbar" id="toolbar">
 			<div layout="row">
 			  <div>
@@ -204,162 +186,91 @@
 				    </button>
 				    <md-menu-content>
 				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('share', $event)">
+				        <md-button>
+				          Share...
+				        </md-button>
+				      </md-menu-item>
+				      <md-menu-divider></md-menu-divider>
+				      <md-menu-item>
+				        <md-button>New</md-button>
+				      </md-menu-item>
+				    </md-menu-content>
+				  </md-menu>
+				</md-menu-bar>
+			  </div>
+			</div>
+		  </md-toolbar>
+		-->
+
+		<!--
+		<md-toolbar class="md-menu-toolbar" id="toolbar">
+			<div layout="row">
+			  <div>
+				<md-menu-bar>
+					<md-menu-item>
+					<button ng-click="$mdOpenMenu()">
+						  File
+						</button>
+					</md-menu-item>
+					<md-menu-item>
+					<button ng-click="$mdOpenMenu()">
+						  Edit
+						</button>
+					</md-menu-item>
+				</md-menu-bar>
+			  </div>
+			</div>
+		  </md-toolbar>
+		-->
+
+		<!--
+		<md-toolbar class="md-menu-toolbar" id="toolbar">
+			<div layout="row">
+			  <div>
+				<md-menu-bar>
+				  <md-menu>
+				    <button ng-click="$mdOpenMenu()">
+				      File
+				    </button>
+				    <md-menu-content>
+				      <md-menu-item>
+				        <md-button>
 				          Share...
 				        </md-button>
 				      </md-menu-item>
 				      <md-menu-divider></md-menu-divider>
 				      <md-menu-item>
 				        <md-menu>
-				          <md-button ng-click="$mdOpenMenu()">New</md-button>
+				          <md-button>New</md-button>
 				          <md-menu-content>
-				            <md-menu-item><md-button ng-click="ctrl.sampleAction('New Document', $event)">Document</md-button></md-menu-item>
-				            <md-menu-item><md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">Spreadsheet</md-button></md-menu-item>
-				            <md-menu-item><md-button ng-click="ctrl.sampleAction('New Presentation', $event)">Presentation</md-button></md-menu-item>
-				            <md-menu-item><md-button ng-click="ctrl.sampleAction('New Form', $event)">Form</md-button></md-menu-item>
-				            <md-menu-item><md-button ng-click="ctrl.sampleAction('New Drawing', $event)">Drawing</md-button></md-menu-item>
+				            <md-menu-item><md-button>Document</md-button></md-menu-item>
+				            <md-menu-item><md-button>Spreadsheet</md-button></md-menu-item>
 				          </md-menu-content>
 				        </md-menu>
 				      </md-menu-item>
-				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('Open', $event)">
-				          Open...
-				          <span class="md-alt-text"> {{ 'M-O' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item>
-				        <md-button disabled="disabled" ng-click="ctrl.sampleAction('Rename', $event)">
-				          Rename
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-divider></md-menu-divider>
-				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('Print', $event)">
-				          Print
-				          <span class="md-alt-text">{{ 'M-P' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
 				    </md-menu-content>
 				  </md-menu>
-				  <md-menu>
+				</md-menu-bar>
+			  </div>
+			</div>
+		  </md-toolbar>
+		-->
+
+		<md-toolbar class="md-menu-toolbar" id="toolbar">
+			<div layout="row">
+			  <div>
+				<md-menu-bar>
+				  <md-menu ng-repeat="item in items">
 				    <button ng-click="$mdOpenMenu()">
-				      Edit
+				      {{item.name}}
 				    </button>
 				    <md-menu-content>
-				      <md-menu-item class="md-indent">
-				        <md-icon md-svg-icon="undo"></md-icon>
-				        <md-button ng-click="ctrl.sampleAction('undo', $event)">
-				          Undo
-				          <span class="md-alt-text">{{ 'M-Z' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item class="md-indent">
-				        <md-icon md-svg-icon="redo"></md-icon>
-				        <md-button ng-click="ctrl.sampleAction('redo', $event)">
-				          Redo
-				          <span class="md-alt-text">{{ 'M-Y' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-divider></md-menu-divider>
-				      <md-menu-item class="md-indent">
-				        <md-icon md-svg-icon="content-cut"></md-icon>
-				        <md-button ng-click="ctrl.sampleAction('cut', $event)">
-				          Cut
-				          <span class="md-alt-text">{{ 'M-X' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item class="md-indent">
-				        <md-icon md-svg-icon="content-copy"></md-icon>
-				        <md-button ng-click="ctrl.sampleAction('copy', $event)">
-				          Copy
-				          <span class="md-alt-text">{{ 'M-C' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item class="md-indent">
-				        <md-icon md-svg-icon="content-paste"></md-icon>
-				        <md-button ng-click="ctrl.sampleAction('paste', $event)">
-				          Paste
-				          <span class="md-alt-text">{{ 'M-P' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-divider></md-menu-divider>
-				      <md-menu-item class="md-indent">
-				        <md-button ng-click="ctrl.sampleAction('Find and replace', $event)">
-				          Find and replace...
-				          <span class="md-alt-text">{{ 'M-S-H' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				    </md-menu-content>
-				  </md-menu>
-				  <md-menu>
-				    <button ng-click="$mdOpenMenu()">
-				      View
-				    </button>
-				    <md-menu-content>
-				      <md-menu-item type="checkbox" ng-model="ctrl.settings.printLayout">Print layout</md-menu-item>
-				      <md-menu-item class="md-indent">
-				        <md-menu>
-				          <md-button ng-click="$mdOpenMenu()">Mode</md-button>
-				          <md-menu-content width="3">
-				            <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'presentation'">Presentation</md-menu-item>
-				            <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'edit'">Edit</md-menu-item>
-				            <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'modifiable'">Modifiable</md-menu-item>
-				          </md-menu-content>
-				        </md-menu>
-				      </md-menu-item>
-				      <md-menu-divider></md-menu-divider>
-				      <md-menu-item type="checkbox" ng-model="ctrl.settings.showRuler">Show ruler</md-menu-item>
-				      <md-menu-item type="checkbox" ng-model="ctrl.settings.showEquationToolbar">Show equation toolbar</md-menu-item>
-				      <md-menu-item type="checkbox" ng-model="ctrl.settings.showSpellingSuggestions">Show spelling suggestions</md-menu-item>
-				      <md-menu-divider></md-menu-divider>
-				      <md-menu-item type="checkbox" ng-model="ctrl.settings.compactControls">Compact controls</md-menu-item>
-				      <md-menu-item type="checkbox" ng-model="ctrl.settings.fullScreen">Full screen</md-menu-item>
-				    </md-menu-content>
-				  </md-menu>
-				  <md-menu>
-				    <button ng-click="$mdOpenMenu()">
-				      Format
-				    </button>
-				    <md-menu-content>
-				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('bold', $event)">
-				          Bold
-				          <span class="md-alt-text"> {{ 'M-B' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('italic', $event)">
-				          Italic
-				          <span class="md-alt-text">{{ 'M-I' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('underline', $event)">
-				          Underline
-				          <span class="md-alt-text">{{ 'M-U' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('strikethrough', $event)">
-				          Strikethrough
-				          <span class="md-alt-text">{{ 'A-S-5' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('superscript', $event)">
-				          Superscript
-				          <span class="md-alt-text">{{ 'M-.' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-item>
-				        <md-button ng-click="ctrl.sampleAction('subscript', $event)">
-				          Subscript
-				          <span class="md-alt-text">{{ 'M-,' | keyboardShortcut }}</span>
-				        </md-button>
-				      </md-menu-item>
-				      <md-menu-divider></md-menu-divider>
-				      <md-menu-item><md-button ng-click="ctrl.toggleSetting('clearFormatting')">Clear Formatting</md-button></md-menu-item>
-				    </md-menu-content>
+						<md-menu-item ng-repeat="subitem in item.items">
+						    <md-button>
+						      {{subitem.name}}
+						    </md-button>
+						</md-menu-item>
+					</md-menu-content>
 				  </md-menu>
 				</md-menu-bar>
 			  </div>
@@ -409,14 +320,6 @@
 					</md-card-title>
 			      </md-card>
 
-			      <div layout="column" layout-align="top center">
-				<div>
-				  <md-button ng-click="toggle()" class="md-raised">
-				    Toggle Sidenav
-				  </md-button>
-				</div>
-			      </div>
-
 			    </md-content>
 		</section>
 
@@ -427,29 +330,28 @@
 		</section>
 
 		<section layout="row" style="width:80%; margin-left: auto; margin-right: auto;">
+
 			<div layout="column" flex="50">
+				
+				<md-card>
+					<canvas id="doughnut" class="chart chart-doughnut"
+							chart-data="piedata"
+							chart-labels="pielabels"
+							chart-click="pieclick"
+							chart-options="pieoptions">
+					</canvas>
+				</md-card>
+
 				<md-card>
 					<canvas id="line" class="chart chart-line" chart-data="chartdata"
 						chart-labels="chartlabels" chart-series="chartseries" chart-options="options"
 						chart-dataset-override="datasetOverride" chart-click="onClick">
 					</canvas>
 				</md-card>
-
-				<md-card>
-					<canvas id="doughnut" class="chart chart-doughnut"
-							chart-data="piedata"
-							chart-labels="pielabels"
-							chart-click="pieclick">
-					</canvas>
-				</md-card>
+				
 			</div>
 
 			<div layout="column" flex="50">
-				<md-card>
-					<canvas id="base" class="chart-horizontal-bar"
-					  chart-data="histdata" chart-labels="histlabels" >
-					</canvas>
-				</md-card>
 
 				<md-card>
 					<md-table-container>
@@ -471,14 +373,16 @@
 					  </table>
 					</md-table-container>
 				</md-card>
+				
+				<md-card>
+					<canvas id="base" class="chart-horizontal-bar"
+					  chart-data="histdata" chart-labels="histlabels" >
+					</canvas>
+				</md-card>
+
 			</div>
 
 		</section>
-
-		<section style="width:80%; margin-left: auto; margin-right: auto;">
-			
-		</section>
-
 		
 	</body>
 </html>
