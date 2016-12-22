@@ -40,7 +40,7 @@
 					      .accentPalette('red')
 					      .warnPalette('light-green');
 				})
-				.controller("controller", function($scope, $mdDialog, $timeout, $mdSidenav){
+				.controller("controller", function($scope, $mdDialog, $timeout, $mdSidenav, $mdMenu){
 
 					self = this;
 
@@ -51,7 +51,7 @@
 						{ name: 'Home', url: "http://www.google.it"},
 						{ name: 'SNP Information', items: [{ name: 'Search for SNPs by region', url: "http://www.google.it"}, { name: 'Search for SNPs within gene', url: "http://www.google.it"}]},
 						{ name: 'INDEL Information', url: ""},
-						{ name: 'Breeds', url: "" },
+						{ name: 'Breeds'},
 						{ name: 'Tools', url: ""},
 						{ name: 'GBrowse', url: ""},
 						{ name: 'Documents & Downloads', url: ""},
@@ -61,8 +61,18 @@
 	
 					$scope.toggle = function() {
 					      return $mdSidenav('left').toggle();
-					    }
-					
+					    };
+
+				  $scope.goTo = function(url){
+					if(url == undefined) console.log("Undefined button action");
+					else console.log("Want to go here: " + url);
+				  };
+
+				  $scope.toggleMenu = function(){
+					if(this.$mdMenuIsOpen) { $mdMenu.hide(); $mdMenu.cancel(); $mdMenu.destroy(); }
+					else this.$mdOpenMenu();
+				  };
+
 				  $scope.chartlabels = ["January", "February", "March", "April", "May", "June", "July"];
 				  $scope.chartseries = ['Series A', 'Series B'];
 				  $scope.chartdata = [
@@ -200,7 +210,6 @@
 			  </div>
 			</div>
 		  </md-toolbar>
-		-->
 
 		<!--
 		<md-toolbar class="md-menu-toolbar" id="toolbar">
@@ -261,12 +270,12 @@
 			  <div>
 				<md-menu-bar>
 				  <md-menu ng-repeat="item in items">
-				    <button ng-click="$mdOpenMenu()">
+				    <button ng-click="item.items.length > 0 ? toggleMenu() : goTo(item.url)">
 				      {{item.name}}
 				    </button>
 				    <md-menu-content>
 						<md-menu-item ng-repeat="subitem in item.items">
-						    <md-button>
+						    <md-button ng-click="subitem.items.length > 0 ? $mdOpenMenu() : goTo(subitem.url)">
 						      {{subitem.name}}
 						    </md-button>
 						</md-menu-item>
@@ -312,10 +321,10 @@
 						<md-card-title-text layout="column">
 							<span class="md-headline" style="font-size: 2em;" ng-bind="ctrl.title"></span>
 							<span class="md-subhead" ng-bind="ctrl.description"></span>
-							<md-card-title-media layout="row" flex="auto" layout-padding>
-								<img class="md-media-sm" style="height:100px;" ng-src="http://galaxy.cineca.it/micco/fusion-form/app/assets/logo_cineca.png" alt="logo1">
-								<img class="md-media-sm" style="height:100px;" ng-src="http://www.agraria.unimi.it/images/minerva_unimi.jpg" alt="logo2">
-						</md-card-title-media>
+							<div layout="row" layout-padding>
+								<img class="md-icon" style="height:100px;" ng-src="http://galaxy.cineca.it/micco/fusion-form/app/assets/logo_cineca.png" alt="logo1">
+								<img class="md-icon" style="height:100px;" ng-src="http://www.agraria.unimi.it/images/minerva_unimi.jpg" alt="logo2">
+							</div>
 						</md-card-title-text>
 					</md-card-title>
 			      </md-card>
