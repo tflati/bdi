@@ -1,0 +1,53 @@
+<section style="padding: 0% 5% 0% 5%;">
+	<p>{{ctrl.info.long_description}}</p>
+</section>
+
+<section layout="row" style="width:80%; margin-left: auto; margin-right: auto;">
+	<div layout="row" flex="100">
+	<table md-table md-row-select multiple>
+		<thead md-head>
+                                           <tr md-row>
+                                                 <th md-column ng-repeat="col in data.header"><span>{{col}}</span></th>
+                                           </tr>
+                                         </thead>
+                                         <tbody md-body>
+                                           <tr md-row md-auto-select ng-repeat="row in data.items">
+                                                 <td md-cell ng-repeat="field in row">
+	<a ng-if="$first" ng-href="http://galaxy.cineca.it/dibiase/output-viewer/app/#/details/{{field}}">{{field}}</a>
+	<span ng-if="!$first">{{field}}</span>
+</td>
+                                           </tr>
+                                         </tbody>
+    </table>
+	</div>
+	<div layout="column" flex="50">
+		
+		<md-card>
+			<canvas style="font-size:10em;" id="doughnut" class="chart chart-doughnut"
+					chart-data="piedata"
+					chart-labels="pielabels"
+					chart-click="pieclick"
+					chart-options="pieoptions">
+			</canvas>
+		</md-card>
+
+		<md-card>
+			<canvas id="line" class="chart chart-line" chart-data="chartdata"
+				chart-labels="chartlabels" chart-series="chartseries" chart-options="options"
+				chart-dataset-override="datasetOverride" chart-click="onClick">
+			</canvas>
+		</md-card>
+		
+	</div>
+
+	<div layout="column" flex="50">
+
+		<md-card>
+			<canvas id="base" class="chart-horizontal-bar"
+			  chart-data="histdata" chart-labels="histlabels" >
+			</canvas>
+		</md-card>
+
+	</div>
+
+</section>
