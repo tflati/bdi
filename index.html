@@ -337,7 +337,7 @@
 					  [28, 48, 40, 19, 86, 27, 90]
 					];
 
-			      $http.get("http://localhost/api/app/statistics_all/").then(function(response){
+			      $http.get("http://localhost/api/app/show_info/Accession_number_peach_1.csv").then(function(response){
                                    console.log("SUCCESS IN GETTING STATISTICS_ALL");
 				   console.log(response.data);
 				   $scope.data = response.data.details;
