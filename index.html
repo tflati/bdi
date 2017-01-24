@@ -45,6 +45,21 @@
 	height: auto;
 }
 
+.icon {
+	height: 32px;
+}
+
+.full-card {
+	margin-left: auto;
+	margin-right: auto;
+	max-height: 500px;
+	overflow-x: scroll;
+}
+
+.full-card-header {
+	overflow-x: auto;
+}
+
 </style>
 
 <script>
@@ -67,6 +82,11 @@
 					self.form;
 					self.form_results = [];
 					self.sending = false;
+					
+// 					$scope.data = {
+// 							"header": ['Fusion events', 'Exon transcripts', 'Genes', 'Protein', 'Exons', 'Viruses'],
+// 							"items": ["N/A", "N/A", "N/A", "N/A", "N/A", "N/A"]
+// 					};
 					
 					self.print = function(){
 						console.log(self.info.forms);
@@ -122,7 +142,8 @@
 						}
 					};
 					
-					self.goTo = function(url){
+					self.goTo = function(item){
+						url = item.url
 						console.log("Want to go to " + url);
 						
 						// Check if the url is a form name
@@ -144,10 +165,18 @@
 						if(isForm) {
 							self.form_results = [];
 							self.page = 'templates/form.html';
-							self.info.image.percentage_width = 10;
+							self.info.image.percentage_width = self.info.image.percentage_width_original / 2;
 							self.header.show_logos = false;
 						}						
-						else window.location = url;
+						else
+							self.page = 'templates/'+url+'.html';
+						
+							if(item.action) {
+								self.info.image.percentage_width = self.info.image.percentage_width_original / 2;
+								self.header.show_logos = false;
+								self.load_data(item.action);
+							}
+							//window.location = url;
 					};
 					
 					self.send_query = function(){
@@ -181,9 +210,44 @@
 					
 					self.ajax2forms = [];
 
+					self.load_data = function(url){
+						
+						$scope.data = [];
+						self.sending = true;
+						$http.get(url).then(function(response)
+                        		{
+									self.sending = false;
+									console.log("SUCCESS IN GETTING DATA FROM " + url);
+									console.log(response.data);
+									$scope.data = response.data.details;
+								},
+								function myError(response) {
+									self.sending = false;
+									console.log(response);
+				                	console.log("ERROR IN GETTING DATA FROM " + url);
+								}
+						);
+					}
+					
 					$http.get('fusion.json').then(function(response) {
                         self.info = response.data;
-                        console.log(response);
+                        self.info.image.percentage_width_original = self.info.image.percentage_width;
+                        console.log(self.info);
+                        
+                        self.load_data(self.info.links.statistics_all);
+                                                
+                        $http.get(self.info.links.statistics_by_chromosome).then(function(response)
+                        		{
+									console.log("SUCCESS IN GETTING STATISTICS BY CHROMOSOME");
+									console.log(response.data);
+									$scope.pielabels = response.data.details.header; 
+									$scope.piedata = response.data.details.items;
+								},
+								function myError(response) {
+									console.log(response);
+				                	console.log("ERROR IN GETTING STATISTICS CHROMOSOME");
+								}
+						);
                         
                         for(var f=0; f<self.info.forms.length; f++)
                         {
@@ -360,17 +424,6 @@
 					  [28, 48, 40, 19, 86, 27, 90]
 					];
 
-			      $http.get("http://galaxy.cineca.it/api/statistics_all/").then(function(response){
-                                   console.log("SUCCESS IN GETTING STATISTICS_ALL");
-				   console.log(response.data);
-				   $scope.data = response.data.details;
-
-				}, function myError(response) {
-									console.log(response);
-                                   console.log("ERROR IN GETTING STATISTICS_ALL");
-				 //console.log(response);
-    				});
-
 				  this.settings = {
 					  printLayout: true,
 					  showRuler: true,
@@ -401,18 +454,18 @@
 			<div>
 				<md-menu-bar> <md-menu
 					ng-repeat="item in ctrl.info.menu">
-				<button ng-click="item.items ? $mdOpenMenu() : ctrl.goTo(item.url)">
+				<button ng-click="item.items ? $mdOpenMenu() : ctrl.goTo(item)">
 					{{item.name}}</button>
 				<md-menu-content> <md-menu-item
 					ng-repeat="subitem in item.items"> <md-button
-					ng-click="ctrl.goTo(subitem.url)"> {{subitem.name}} </md-button> </md-menu-item> </md-menu-content>
+					ng-click="ctrl.goTo(subitem)"> {{subitem.name}} </md-button> </md-menu-item> </md-menu-content>
 				</md-menu> </md-menu-bar>
 			</div>
 		</div>
 		</md-toolbar>
 
-		<section layout="row" flex>
-			<md-card layout="row">
+		<section layout="row" flex="100">
+			<md-card layout="row" class="full-card full-card-header">
 			    <img ng-src="{{ctrl.info.image.src}}" class="md-card-image header-image" style="max-height:{{ctrl.info.image.percentage_width}}px;">
 				<md-card-title layout="column">
 					<md-card-title-text layout="column">
@@ -422,14 +475,14 @@
 							ng-bind="ctrl.info.description"></span>
 							
 						<md-card-title-media ng-if="ctrl.header.show_logos" layout="row" flex="auto" layout-padding>
-							<img class="md-media-sm" style="height: 100px;" ng-src="http://galaxy.cineca.it/micco/fusion-form/app/assets/logo_cineca.png" alt="logo1">
-							<img class="md-media-sm" style="height: 100px;" ng-src="logo_negri.png" alt="logo2">
+							<img class="md-media-sm" style="height: 100px;" ng-src="http://www.procedamus.it/images/CINECA.jpg">
+							<img class="md-media-sm" style="height: 100px;" ng-src="logo_negri.png">
 						</md-card-title-media>
 					</md-card-title-text>
 				</md-card-title>
 			</md-card>
 		</section>
-
+		
 		<div ng-include="ctrl.page"></div>
 	</div>
 </body>

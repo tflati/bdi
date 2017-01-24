@@ -29,26 +29,36 @@
 				
 			</md-radio-group>
 		</div>
-		<input type="submit" ng-value="ctrl.info.form.submit.label">
+		<md-button ng-click="ctrl.send_query()" class="md-primary md-raised">{{ctrl.form.submit.label}}</md-button>
+<!-- 		<input type="submit" ng-value="ctrl.form.submit.label"> -->
 	</form>
 </section>
-<section>
+
+<section style="padding: 0% 5% 0% 5%;">
 	<div ng-if="ctrl.sending" style="text-align: center; color: cadetblue;">
         	<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
     </div>
 
-	<table md-table md-row-select multiple>
-		<thead md-head>
-        	<tr md-row>
-            	<th md-column ng-repeat="col in ctrl.form_results.header track by $index"><span>{{col}}</span></th>
-			</tr>
-		</thead>
-		<tbody md-body>
-	        <tr ng-if="!ctrl.sending" md-row md-auto-select ng-repeat="row in ctrl.form_results.items track by $index">
-	        	<td md-cell ng-repeat="field in row track by $index">
-					<span>{{field}}</span>
-				</td>
-			</tr>
-		</tbody>
-	</table>	
+	<md-card ng-if="ctrl.form_results.items" class="full-card">
+		<md-card-title style="text-align: center;">
+			<span>{{ctrl.form_results.items.length}}</span>
+			<span>&nbsp;results</span>
+		</md-card-title>
+		<md-card-content>
+			<table md-table md-row-select multiple>
+				<thead md-head>
+		        	<tr md-row>
+		            	<th md-column ng-repeat="col in ctrl.form_results.header track by $index"><span>{{col}}</span></th>
+					</tr>
+				</thead>
+				<tbody md-body>
+			        <tr ng-if="!ctrl.sending" md-row md-auto-select ng-repeat="row in ctrl.form_results.items track by $index">
+			        	<td md-cell ng-repeat="field in row track by $index">
+							<span>{{field}}</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</md-card-content>
+	</md-card>	
 </section>
