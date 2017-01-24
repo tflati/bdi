@@ -2,10 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-	content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-<link rel="stylesheet"
-	href="bower_components/angular-material/angular-material.css">
+
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+
+<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
 
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-aria/angular-aria.js"></script>
@@ -36,6 +37,14 @@
 #toolbar {
 	background-color: #efefef;
 }
+
+.header-image {
+	margin-top: auto;
+	margin-bottom: auto;
+	width: auto;
+	height: auto;
+}
+
 </style>
 
 <script>
@@ -56,6 +65,8 @@
 					self.header = {show_logos: true};
 					
 					self.form;
+					self.form_results = [];
+					self.sending = false;
 					
 					self.print = function(){
 						console.log(self.info.forms);
@@ -131,6 +142,7 @@
 						}
 						
 						if(isForm) {
+							self.form_results = [];
 							self.page = 'templates/form.html';
 							self.info.image.percentage_width = 10;
 							self.header.show_logos = false;
@@ -140,20 +152,31 @@
 					
 					self.send_query = function(){
 						var args = [];
-						for(var i=0; i<self.info.forms.fields.length-1; i++)
+						console.log(self.form)
+						for(var i=0; i<self.form.fields.length; i++)
 						{
-							var field = self.info.forms.fields[i];
+							var field = self.form.fields[i];
 							var value = field.value;
-							args.push(value);
+							console.log("VALUE", value)
+							if (i == 0 && (value == undefined || value == "")) continue;
+                                                        args.push(value);
 						}
 						
-						console.log(args);
+						console.log("ARGS", args);
 						
-						$http.get(self.info.forms.submit.url + args.join("/")).then(function(response) {
+						self.sending = true;
+						if( ! self.form.submit.url.endsWith("/") ) self.form.submit.url = self.form.submit.url  + "/";
+						$http.get(self.form.submit.url + args.join("/") + "/").then(function(response) {
+							self.sending = false;
 							console.log("QUERY SUCCESS", response);
-							self.data = response.data.details;
+							self.form_results = response.data.rows;
+
+							console.log("HEADER", self.form_results.header);
 							
-						}, function(response){ console.log("ERROR WHILE SENDING QUERY...", response);});
+						}, function(response){
+							self.sending = false;
+							console.log("ERROR WHILE SENDING QUERY...", response);
+						});
 					};
 					
 					self.ajax2forms = [];
@@ -306,8 +329,8 @@
 					}
 				  };
 
-				  $scope.pielabels = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chr23", "chr24", "chr25", "chr26", "chr27", "chr28", "chr29", "chrX"];
-				  $scope.piedata = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+				  $scope.pielabels = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"];
+				  $scope.piedata = [12823, 9119, 14449, 9995, 11638, 13323, 3988, 2985, 3852, 23751, 3929, 5879, 6796, 7609, 10341, 1360, 14395, 4863, 136, 1624, 4623, 2521, 4690, 5949];
 				  $scope.pieclick = function(evt)
 				  {
 					    var chr = $scope.pielabels[evt[0]._index];
@@ -337,7 +360,7 @@
 					  [28, 48, 40, 19, 86, 27, 90]
 					];
 
-			      $http.get("http://localhost/api/app/show_info/Accession_number_peach_1.csv").then(function(response){
+			      $http.get("http://galaxy.cineca.it/api/statistics_all/").then(function(response){
                                    console.log("SUCCESS IN GETTING STATISTICS_ALL");
 				   console.log(response.data);
 				   $scope.data = response.data.details;
@@ -389,20 +412,22 @@
 		</md-toolbar>
 
 		<section layout="row" flex>
-			<md-content flex layout-padding> <md-card layout="row">
-			<img flex="{{ctrl.info.image.percentage_width}}"
-				ng-src="{{ctrl.info.image.src}}" class="md-card-image"> <md-card-title
-				layout="column" flex="{{100-ctrl.info.image.percentage_width}}">
-			<md-card-title-text layout="column"> <span
-				class="md-headline" style="font-size: 2em;"
-				ng-bind="ctrl.info.title"></span> <span class="md-subhead"
-				ng-bind="ctrl.info.description"></span> <md-card-title-media
-				ng-if="ctrl.header.show_logos" layout="row" flex="auto"
-				layout-padding> <img class="md-media-sm"
-				style="height: 100px;"
-				ng-src="http://galaxy.cineca.it/micco/fusion-form/app/assets/logo_cineca.png"
-				alt="logo1"> <img class="md-media-sm" ng-src="logo_negri.png"
-				alt="logo2"> </md-card-title-media> </md-card-title-text> </md-card-title> </md-card> </md-content>
+			<md-card layout="row">
+			    <img ng-src="{{ctrl.info.image.src}}" class="md-card-image header-image" style="max-height:{{ctrl.info.image.percentage_width}}px;">
+				<md-card-title layout="column">
+					<md-card-title-text layout="column">
+						<span
+							class="md-headline" style="font-size: 2em;"
+							ng-bind="ctrl.info.title"></span> <span class="md-subhead"
+							ng-bind="ctrl.info.description"></span>
+							
+						<md-card-title-media ng-if="ctrl.header.show_logos" layout="row" flex="auto" layout-padding>
+							<img class="md-media-sm" style="height: 100px;" ng-src="http://galaxy.cineca.it/micco/fusion-form/app/assets/logo_cineca.png" alt="logo1">
+							<img class="md-media-sm" style="height: 100px;" ng-src="logo_negri.png" alt="logo2">
+						</md-card-title-media>
+					</md-card-title-text>
+				</md-card-title>
+			</md-card>
 		</section>
 
 		<div ng-include="ctrl.page"></div>
