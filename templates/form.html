@@ -53,7 +53,7 @@
 				</thead>
 				<tbody md-body>
 			        <tr ng-if="!ctrl.sending" md-row md-auto-select ng-repeat="row in ctrl.form_results.items track by $index">
-			        	<td md-cell ng-repeat="field in row track by $index">
+			        	<td md-cell ng-repeat="field in row track by $index" style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
 							<span>{{field}}</span>
 						</td>
 					</tr>

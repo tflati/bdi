@@ -16,6 +16,10 @@
 <script src="bower_components/chart.js/dist/Chart.js"></script>
 <script src="bower_components/angular-chart.js/angular-chart.js"></script>
 
+<script src="lib/jquery.js"></script>
+<script src="lib/d3.js"></script>
+<script src="lib/biocircos-1.1.2.js"></script>
+
 <!-- TABLES -->
 <link
 	href="bower_components/angular-material-data-table/dist/md-data-table.min.css"
@@ -60,6 +64,11 @@
 	overflow-x: auto;
 }
 
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
 </style>
 
 <script>
@@ -70,8 +79,7 @@
 					      .primaryPalette('amber')
 					      .accentPalette('red')
 					      .warnPalette('light-green');
-				})
-				.controller("controller", function($http, $scope, $mdDialog, $timeout, $mdSidenav){
+				}).controller("controller", function($http, $scope, $mdDialog, $timeout, $mdSidenav){
 
 					self = this;
 					
@@ -79,14 +87,51 @@
 					self.info = {};
 					self.header = {show_logos: true};
 					
+					self.sending = true;
+					
 					self.form;
 					self.form_results = [];
 					self.sending = false;
-					
-// 					$scope.data = {
-// 							"header": ['Fusion events', 'Exon transcripts', 'Genes', 'Protein', 'Exons', 'Viruses'],
-// 							"items": ["N/A", "N/A", "N/A", "N/A", "N/A", "N/A"]
-// 					};
+
+					self.circos = { value: "CCLE_001", values: [], events: [ "LINK01", {
+						  LinkRadius: 60,
+						  LinkFillColor: "#F26223",
+						  LinkWidth: 3,
+						  displayLinkAxis: true,
+						  LinkAxisColor: "#B8B8B8",
+						  LinkAxisWidth: 0.5,
+						  LinkAxisPad: 3,
+						  displayLinkLabel: true,
+						  LinkLabelColor: "red",
+						  LinkLabelSize: 13,
+						  LinkLabelPad: 8,
+						}],
+						genome: [
+						    ["1" , 249250621],
+						    ["2" , 243199373],
+						    ["3" , 198022430],
+						    ["4" , 191154276],
+						    ["5" , 180915260],
+						    ["6" , 171115067],
+						    ["7" , 159138663],
+						    ["8" , 146364022],
+						    ["9" , 141213431],
+						    ["10" , 135534747],
+						    ["11" , 135006516],
+						    ["12" , 133851895],
+						    ["13" , 115169878],
+						    ["14" , 107349540],
+						    ["15" , 102531392],
+						    ["16" , 90354753],
+						    ["17" , 81195210],
+						    ["18" , 78077248],
+						    ["19" , 59128983],
+						    ["20" , 63025520],
+						    ["21" , 48129895],
+						    ["22" , 51304566],
+						    ["X" , 155270560],
+						    ["Y" , 59373566]
+					 ]};
 					
 					self.print = function(){
 						console.log(self.info.forms);
@@ -167,16 +212,89 @@
 							self.page = 'templates/form.html';
 							self.info.image.percentage_width = self.info.image.percentage_width_original / 2;
 							self.header.show_logos = false;
-						}						
-						else
+						}
+						else {
+							if(url == "home") url = "main";
+							
 							self.page = 'templates/'+url+'.html';
-						
+							
 							if(item.action) {
 								self.info.image.percentage_width = self.info.image.percentage_width_original / 2;
 								self.header.show_logos = false;
 								self.load_data(item.action);
 							}
-							//window.location = url;
+							
+							if(url == "main") {
+								self.page = 'templates/main.html'; // window.location = url;
+								self.info.image.percentage_width = self.info.image.percentage_width_original;
+								self.header.show_logos = true;
+							}
+						}
+					};
+					
+					self.show_circos = function(url){
+						$("#biocircos").empty();
+						self.sending = true;
+						self.circos.events[2] = [];
+						
+						$http.get(url).then(function(response) {
+							self.sending = false;
+							
+							console.log("CIRCOS DATA: SUCCESS from url", url, response.data.rows);
+							
+							var circos_events = [];
+							for(var i=0; i<response.data.rows.items.length; i++)
+							{
+								var item = response.data.rows.items[i];
+								
+								var gene_pair = item[1];
+								var gene1 = gene_pair.split("-")[0].trim();
+								var gene2 = gene_pair.split("-")[1].trim();
+								
+								var chrom_pair = JSON.parse(item[4].replace(/'/g, '"'));
+								var chrm1 = chrom_pair[0].split(":")[0];
+								var chrm2 = chrom_pair[1].split(":")[0];
+								var fusion_point1 = chrom_pair[0].split(":")[1];
+								var fusion_point2 = chrom_pair[1].split(":")[1];
+								
+								circos_events.push(
+									{fusion: gene1+"--"+gene2 , g1chr: chrm1, g1start: fusion_point1, g1end: fusion_point1, g1name: gene1, g2chr: chrm2, g2start: fusion_point2, g2end: fusion_point2, g2name: gene2}
+								);
+							}
+							
+							console.log(self.circos);
+							self.circos.events[2] = circos_events;
+							console.log(circos_events);
+							
+							BioCircos01 = new BioCircos(self.circos.events, self.circos.genome, {
+							    target : "biocircos",
+							    svgWidth : 600,
+							    svgHeight : 400,
+							    innerRadius: 160,
+							    outerRadius: 180,
+							    genomeFillColor: ["#FFFFCC", "#CCFFFF", "#FFCCCC", "#CCCC99","#0099CC", "#996699", "#336699", "#FFCC33","#66CC00"],
+							    LINKMouseEvent : true,
+							    LINKMouseClickDisplay : true,
+							    LINKMouseClickOpacity : 1.0,
+							    LINKMouseClickStrokeColor : "red",
+							    LINKMouseClickStrokeWidth : 6,
+							    LINKLabelDragEvent : false,
+							 });
+							 BioCircos01.draw_genome(BioCircos01.genomeLength);
+							 
+							}, function(response){
+								self.sending = false;
+								console.log("ERROR WHILE GETTING CIRCOS DATA...", response);
+							});
+					};
+					
+					self.load_circos = function(url){
+						$http.get(url).then(function(response) {
+							console.log("CIRCOS DATA OPTIONS: SUCCESS", response.data);
+							self.circos.values = response.data;
+						}, function(response){
+							console.log("ERROR WHILE GETTING CIRCOS DATA OPTIONS...", response);
+						});
 					};
 					
 					self.send_query = function(){
@@ -227,7 +345,26 @@
 				                	console.log("ERROR IN GETTING DATA FROM " + url);
 								}
 						);
-					}
+					};
+					
+					self.load_subdata = function(url){
+						
+						$scope.subdata = [];
+						self.sending = true;
+						$http.get(url).then(function(response)
+                        		{
+									self.sending = false;
+									console.log("SUCCESS IN GETTING DATA FROM " + url);
+									console.log(response.data);
+									$scope.subdata = response.data.details;
+								},
+								function myError(response) {
+									self.sending = false;
+									console.log(response);
+				                	console.log("ERROR IN GETTING DATA FROM " + url);
+								}
+						);
+					};
 					
 					$http.get('fusion.json').then(function(response) {
                         self.info = response.data;
@@ -356,6 +493,8 @@
                             );
                         }
                         
+                        self.show_circos(self.info.links.circos_url + self.circos.value + "/");
+                        
                 	}, function(response){
                 		console.log("ERROR GETTING THE CONFIG FILE");
                 	});
@@ -398,22 +537,26 @@
 				  $scope.pieclick = function(evt)
 				  {
 					    var chr = $scope.pielabels[evt[0]._index];
-						$mdDialog.show(
-							  $mdDialog.alert()
-								.clickOutsideToClose(true)
-								.title('Cromosoma: ' + chr)
-								.textContent('Questa funzione non è stata ancora implementata.')
-								.ariaLabel('Chromosome info')
-								.ok('Ho capito!')
-								.openFrom({
-								  top: -50,
-								  width: 30,
-								  height: 80
-								})
-								.closeTo({
-								  left: 1500
-								})
-							);
+					    var chr_for_query = chr.replace("chr", "").trim();
+					    self.clicked_chromosome = chr_for_query;
+					    self.load_subdata(self.info.links.statistics_single_chromosome + chr_for_query + "/");
+					    
+// 						$mdDialog.show(
+// 							  $mdDialog.alert()
+// 								.clickOutsideToClose(true)
+// 								.title('Cromosoma: ' + chr)
+// 								.textContent('Questa funzione non è stata ancora implementata.')
+// 								.ariaLabel('Chromosome info')
+// 								.ok('Ho capito!')
+// 								.openFrom({
+// 								  top: -50,
+// 								  width: 30,
+// 								  height: 80
+// 								})
+// 								.closeTo({
+// 								  left: 1500
+// 								})
+// 							);
 				  };
 				  $scope.pieoptions = {fontSize: 200};
 
@@ -486,4 +629,5 @@
 		<div ng-include="ctrl.page"></div>
 	</div>
 </body>
+
 </html>

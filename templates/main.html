@@ -47,7 +47,7 @@
 			</canvas>
 			</md-card-content>
 		</md-card>
-
+		
 <!-- 
 		<md-card layout-padding>
 			<canvas id="line" class="chart chart-line" chart-data="chartdata"
@@ -62,6 +62,41 @@
 			</canvas>
 		</md-card>
 -->
-
 	</div>
+	
+	<div layout="column" flex="30">
+	
+		<md-card>
+			<md-card-title style="text-align: center;">Summary for chromosome {{ctrl.clicked_chromosome}}</md-card-title>
+			<md-card-content>
+				<table md-table md-row-select multiple>
+					<tbody md-body>
+						<tr md-row md-auto-select ng-repeat="label in subdata.header track by $index">
+							<td md-cell style="font-weight: bold;"><span>{{label}}</span></td>
+							<td md-cell style="text-align: right;"><span>{{subdata.items[0][$index]}}</span></td>
+						</tr>
+					</tbody>
+	    		</table>			    
+			</md-card-content>
+		</md-card>
+	</div>
+</section>
+
+<section layout="row" flex="100" class="center" style="width:80%;">
+
+	<md-card class="full-card full-card-header">
+		<md-card-title style="text-align: center;">{{ctrl.circos.events[2].length}} fusion events for cell line &nbsp;
+			<md-select style="margin-top: 0px;" ng-change="ctrl.show_circos('http://localhost/api/cell_line/' + ctrl.circos.value + '/')" ng-init="ctrl.load_circos('http://localhost/api/cell_lines/')" ng-model="ctrl.circos.value" ng-model-options="{trackBy: '$value.id'}">
+				<md-option ng-value="value" ng-repeat="value in ctrl.circos.values track by $index">{{value}}</md-option>
+			</md-select>
+		</md-card-title>
+		
+		<div ng-if="ctrl.sending" style="text-align: center; color: cadetblue;">
+        	<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    	</div>
+		
+		<md-card-content>
+		   	<div style="font-size: 0.5em;" id="biocircos"></div>
+		</md-card-content>
+	</md-card>
 </section>

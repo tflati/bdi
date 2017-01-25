@@ -5,14 +5,16 @@
 		"src": "logo.png",
 		"percentage_width": "200"
 	},
-	"long_description": "SFGdb is a database designed to provide access to reliable annotations of Somatic Fusion Genes detected from paired-end RNA-sequencing data. Fusion analysis was performed using the FusionCatcher algorithm on 935 tumor cell lines available on TCGA repository.",
+	"long_description": "SFGdb is a database designed to provide access to predictions and annotations of Somatic Fusion Genes detected from paired-end RNA-sequencing data. Fusion analysis has been performed using the FusionCatcher algorithm on 935 tumor cell lines available on TCGA repository.",
 	"links": {
 		"statistics_all": "http://localhost/api/statistics_all/",
-		"statistics_by_chromosome": "http://localhost/api/fusion_by_chromosome/"
+		"statistics_by_chromosome": "http://localhost/api/fusion_by_chromosome/",
+		"statistics_single_chromosome": "http://localhost/api/statistics_by_chromosome/",
+		"circos_url": "http://localhost/api/cell_line/"
 	},
 	"menu": [{
 			"name": "Home",
-			"url": "/fusion"
+			"url": "home"
 		}, {
 			"name": "Search",
 				"items": [{
@@ -165,7 +167,7 @@
 				"value": "single gene",
 				"name": "subform_search_for_single_gene",
 				"fields": [{
-					"label": "Symbol or EnsembleID",
+					"label": "Symbol or EnsembleID (e.g., DHRS1 or ENSG00000157379)",
 					"type": "text",
 					"values": "http://localhost/api/Search_for_single_gene",
 					"placeholder": "DHRS1 or ENSG00000157379",
@@ -182,13 +184,13 @@
 				"value": "pair gene",
 				"name": "subform_search_for_pair_gene",
 				"fields": [{
-					"label": "Symbol or EnsembleID of first gene",
+					"label": "Symbol or EnsembleID of first gene (e.g., DHRS1 or ENSG00000157379)",
 					"type": "text",
 					"values": "http://localhost/api/Search_for_single_gene",
 					"placeholder": "DHRS1 or ENSG00000157379",
 					"required": "true"
 				}, {
-					"label": "Symbol or EnsembleID of second gene",
+					"label": "Symbol or EnsembleID of second gene (e.g., RABGGTA or ENSG00000100949)",
 					"type": "text",
 					"values": "http://localhost/api/Search_for_single_gene",
 					"placeholder": "RABGGTA or ENSG00000100949",
@@ -215,7 +217,7 @@
 			"group_id": "exon_selection",
 			"form": [{
 				"value": "single exon",
-				"name": "subform_search_for_single_exon",
+				"name": "subform_search_for_single_exon (e.g., ENSE00001678826)",
 				"fields": [{
 					"label": "Exon EnsembleID",
 					"type": "text",
@@ -233,13 +235,13 @@
 				"value": "pair exon",
 				"name": "subform_search_for_pair_exon",
 				"fields": [{
-					"label": "Exon EnsembleID of first exon",
+					"label": "Exon EnsembleID of first exon (e.g., ENSE00001678826)",
 					"type": "text",
 					"values": "http://localhost/api/Search_for_single_gene",
 					"placeholder": "ENSE00001678826",
 					"required": "true"
 				}, {
-					"label": "Exon EnsembleID of second exon",
+					"label": "Exon EnsembleID of second exon (e.g., ENSE00000991541)",
 					"type": "text",
 					"values": "http://localhost/api/Search_for_single_gene",
 					"placeholder": "ENSE00000991541",
@@ -275,7 +277,7 @@
 				"value": "single transcript",
 				"name": "subform_search_for_single_transcript",
 				"fields": [{
-					"label": "Transcript EnsembleID",
+					"label": "Transcript EnsembleID (e.g., ENST00000371998)",
 					"type": "text",
 					"values": "http://localhost/api/Search_for_single_transcript",
 					"placeholder": "ENST00000371998",
@@ -291,13 +293,13 @@
 				"value": "pair transcript",
 				"name": "subform_search_for_pair_transcript",
 				"fields": [{
-					"label": "Transcript EnsembleID of first transcript",
+					"label": "Transcript EnsembleID of first transcript (e.g., ENST00000371998)",
 					"type": "text",
 					"values": "http://localhost/api/Search_for_single_gene",
 					"placeholder": "ENST00000371998",
 					"required": "true"
 				}, {
-					"label": "Transcript EnsembleID of second transcript",
+					"label": "Transcript EnsembleID of second transcript (e.g., ENST00000302326)",
 					"type": "text",
 					"values": "http://localhost/api/Search_for_single_gene",
 					"placeholder": "ENST00000302326",
@@ -325,7 +327,7 @@
 	},{
 		"name": "search_for_viruses",
 		"fields": [{
-			"label": "Virus name, GI id or NC ID",
+			"label": "Virus name, GI id or NC ID (e.g., 9626958 or NC_001501.1)",
 			"type": "text",
 			"values": "http://localhost/api/Search_for_viruses",
 			"placeholder": "Moloney murine leukemia virus, complete genome, 9626958 or NC_001501.1",
