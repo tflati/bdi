@@ -24,7 +24,7 @@
 						<tr md-row md-auto-select ng-repeat="row in data.items">
 							<td md-cell style="text-align: center; padding: 20px;" ng-repeat="field in row">
 								<div>
-									<a ng-if="field.url" ng-href="{{field.url}}">
+									<a download ng-if="field.url" ng-href="{{field.url}}">
 										<img class="icon" src="http://icons.iconarchive.com/icons/rokey/seed/128/text-document-icon.png">
 									</a>
 									<div>{{field.label}}</div>
