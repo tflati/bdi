@@ -12,6 +12,7 @@
 <script src="bower_components/angular-aria/angular-aria.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-material/angular-material.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 
 <script src="bower_components/chart.js/dist/Chart.js"></script>
 <script src="bower_components/angular-chart.js/angular-chart.js"></script>
@@ -73,7 +74,9 @@
 
 <script>
 
-			angular.module( 'app', [ 'ngMaterial', 'chart.js', 'md.data.table'] )
+			angular.module( 'app', [ 'ngMaterial', 'ngSanitize', 'chart.js', 'md.data.table'] )
+				.run(['$templateCache', function ( $templateCache ) {
+				    $templateCache.removeAll(); }])
 				.config(function($mdThemingProvider) {
 					$mdThemingProvider.theme('big-data-theme')
 					      .primaryPalette('amber')
@@ -222,6 +225,8 @@
 								self.info.image.percentage_width = self.info.image.percentage_width_original / 2;
 								self.header.show_logos = false;
 								self.load_data(item.action);
+
+								console.log("CONTROLLER", self.info);
 							}
 							
 							if(url == "main") {
@@ -612,14 +617,12 @@
 			    <img ng-src="{{ctrl.info.image.src}}" class="md-card-image header-image" style="max-height:{{ctrl.info.image.percentage_width}}px;">
 				<md-card-title layout="column">
 					<md-card-title-text layout="column">
-						<span
-							class="md-headline" style="font-size: 2em;"
-							ng-bind="ctrl.info.title"></span> <span class="md-subhead"
-							ng-bind="ctrl.info.description"></span>
+						<span class="md-headline" style="font-size: 2em;" ng-bind="ctrl.info.title"></span>
+						<span class="md-subhead" ng-bind-html="ctrl.info.description"></span>
 							
 						<md-card-title-media ng-if="ctrl.header.show_logos" layout="row" flex="auto" layout-padding>
-							<img class="md-media-sm" style="height: 100px;" ng-src="http://www.procedamus.it/images/CINECA.jpg">
 							<img class="md-media-sm" style="height: 100px;" ng-src="logo_negri.png">
+							<img class="md-media-sm" style="height: 100px;" ng-src="http://www.procedamus.it/images/CINECA.jpg">
 						</md-card-title-media>
 					</md-card-title-text>
 				</md-card-title>
