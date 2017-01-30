@@ -86,7 +86,7 @@
 
 	<md-card class="full-card full-card-header">
 		<md-card-title style="text-align: center;">{{ctrl.circos.events[2].length}} fusion events for cell line &nbsp;
-			<md-select style="margin-top: 0px;" ng-change="ctrl.show_circos('http://galaxy.cineca.it/api/cell_line/' + ctrl.circos.value + '/')" ng-init="ctrl.load_circos('http://galaxy.cineca.it/api/cell_lines/')" ng-model="ctrl.circos.value" ng-model-options="{trackBy: '$value.id'}">
+			<md-select style="margin: 0px;" ng-change="ctrl.show_circos('http://localhost/api/cell_line/' + ctrl.circos.value + '/')" ng-init="ctrl.load_circos('http://localhost/api/cell_lines/')" ng-model="ctrl.circos.value" ng-model-options="{trackBy: '$value.id'}">
 				<md-option ng-value="value" ng-repeat="value in ctrl.circos.values track by $index">{{value}}</md-option>
 			</md-select>
 		</md-card-title>
@@ -96,6 +96,15 @@
     	</div>
 		
 		<md-card-content>
+			<p class="smaller-text">
+				<span class="fa-stack">
+				  <i class="fa fa-circle-o fa-stack-2x"></i>
+				  <i class="fa fa-info fa-stack-1x"></i>
+				</span>
+				<span>
+					Ticks in the plot correspond to about 30 million bases
+				</span>
+			</p>
 		   	<div style="font-size: 0.5em;" id="biocircos"></div>
 		</md-card-content>
 	</md-card>
