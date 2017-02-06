@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
+<meta http-equiv="Cache-control" content="no-cache">
 <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
 
@@ -53,6 +53,15 @@
 	height: 32px;
 }
 
+.header-logo-container {
+	margin-left: auto;
+}
+
+.header-logo {
+	max-height: 85px;
+	width: auto;
+}
+
 .full-card {
 	margin-left: auto;
 	margin-right: auto;
@@ -73,6 +82,27 @@
 	font-size: 0.7em;
 }
 
+#footer {
+	background-color: #D7D7D7;
+	color: #6f6f6f;
+	font-weight: bolder;
+	text-align: center;
+	padding: 1em;
+	margin-top: 2em;
+	
+/* 	bottom: 0; */
+/* 	position: absolute; */
+/* 	width: 100%; */
+}
+md-toolbar {
+	padding: 15px;
+	min-height: auto;
+}
+
+md-menu button {
+	font-size: 16px;
+}
+
 </style>
 
 <script>
@@ -83,6 +113,29 @@
 					      .primaryPalette('amber')
 					      .accentPalette('red')
 					      .warnPalette('light-green');
+				}).controller("dataController", function($http, $scope){
+					
+					$scope.sending = false;
+					
+					$scope.load_subdata = function(url){
+						
+						$scope.subdata = [];
+						$scope.sending = true;
+						$http.get(url).then(function(response)
+                        		{
+									$scope.sending = false;
+									console.log("SUCCESS IN GETTING DATA FROM " + url);
+									console.log(response.data);
+									$scope.subdata = response.data.details;
+								},
+								function myError(response) {
+									$scope.sending = false;
+									console.log(response);
+				                	console.log("ERROR IN GETTING DATA FROM " + url);
+								}
+						);
+					};
+					
 				}).controller("controller", function($http, $scope, $mdDialog, $timeout, $mdSidenav){
 
 					self = this;
@@ -376,13 +429,16 @@
                         console.log(self.info);
                         
                         self.load_data(self.info.links.statistics_all);
-                                                
+                        self.clicked_chromosome = "1"
+                        self.load_subdata(self.info.links.statistics_single_chromosome + self.clicked_chromosome + "/");
+                        
                         $http.get(self.info.links.statistics_by_chromosome).then(function(response)
                         		{
 									console.log("SUCCESS IN GETTING STATISTICS BY CHROMOSOME");
 									console.log(response.data);
 									$scope.pielabels = response.data.details.header; 
 									$scope.piedata = response.data.details.items;
+									$scope.pieheader = response.data.details.labels;
 								},
 								function myError(response) {
 									console.log(response);
@@ -536,8 +592,8 @@
 					}
 				  };
 
-				  $scope.pielabels = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"];
-				  $scope.piedata = [12823, 9119, 14449, 9995, 11638, 13323, 3988, 2985, 3852, 23751, 3929, 5879, 6796, 7609, 10341, 1360, 14395, 4863, 136, 1624, 4623, 2521, 4690, 5949];
+// 				  $scope.pielabels = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"];
+// 				  $scope.piedata = [12823, 9119, 14449, 9995, 11638, 13323, 3988, 2985, 3852, 23751, 3929, 5879, 6796, 7609, 10341, 1360, 14395, 4863, 136, 1624, 4623, 2521, 4690, 5949];
 				  $scope.pieclick = function(evt)
 				  {
 					    var chr = $scope.pielabels[evt[0]._index];
@@ -621,9 +677,8 @@
 							ng-bind="ctrl.info.title"></span> <span class="md-subhead"
 							ng-bind="ctrl.info.description"></span>
 							
-						<md-card-title-media ng-if="ctrl.header.show_logos" layout="row" flex="auto" layout-padding>
-							<img class="md-media-sm" style="height: 100px;" ng-src="http://www.procedamus.it/images/CINECA.jpg">
-							<img class="md-media-sm" style="height: 100px;" ng-src="logo_negri.png">
+						<md-card-title-media ng-if="ctrl.header.show_logos" layout="row" class="header-logo-container" flex="auto" layout-padding>
+							<img class="header-logo" ng-repeat="logo in ctrl.info.logos" ng-src="{{logo.image}}">
 						</md-card-title-media>
 					</md-card-title-text>
 				</md-card-title>
@@ -631,6 +686,12 @@
 		</section>
 		
 		<div ng-include="ctrl.page"></div>
+		
+		<section>
+			<div id="footer">
+			<p>Developed by Cineca</p>
+			</div>
+		</section>
 	</div>
 </body>
 

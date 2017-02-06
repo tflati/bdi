@@ -5,11 +5,19 @@
 		"src": "logo.png",
 		"percentage_width": "200"
 	},
+	"logos": [
+		{
+			"image": "http://www.procedamus.it/images/CINECA.jpg"
+		},
+		{
+			"image": "logo_negri.png"
+		}
+	],
 	"long_description": "SFGdb is a database designed to provide access to predictions and annotations of Somatic Fusion Genes detected from paired-end RNA-sequencing data. Fusion analysis has been performed using the FusionCatcher algorithm on 935 tumor cell lines available on TCGA repository.",
 	"links": {
 		"statistics_all": "http://localhost/api/statistics_all/",
-		"statistics_by_chromosome": "http://localhost/api/fusion_by_chromosome/",
-		"statistics_single_chromosome": "http://localhost/api/statistics_by_chromosome/",
+		"statistics_by_chromosome": "http://localhost/api/get_distribution/Chromosome/Fusion/",
+		"statistics_single_chromosome": "http://localhost/api/get_single_distribution/Chromosome/",
 		"circos_url": "http://localhost/api/cell_line/"
 	},
 	"menu": [{
@@ -44,7 +52,8 @@
 		"url": "downloads",
 		"action": "http://localhost/api/download_data/"
 	}, {
-		"name": "Statistics"
+		"name": "Statistics",
+		"url": "statistics"
 	}, {
 		"name": "Contact"
 	}],

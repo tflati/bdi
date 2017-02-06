@@ -46,22 +46,14 @@
 					chart-options="pieoptions">
 			</canvas>
 			</md-card-content>
+			<md-divider></md-divider>
+			<md-card-footer>
+				<span ng-bind="piedata.length"></span>
+    			<span> </span>
+    			<span ng-bind="pieheader[0]"></span><span ng-if="pieheader.length > 0">s</span>
+    		</md-card-footer>
 		</md-card>
 		
-<!-- 
-		<md-card layout-padding>
-			<canvas id="line" class="chart chart-line" chart-data="chartdata"
-				chart-labels="chartlabels" chart-series="chartseries" chart-options="options"
-				chart-dataset-override="datasetOverride" chart-click="onClick">
-			</canvas>
-		</md-card>
-		
-		<md-card layout-padding>
-			<canvas id="base" class="chart-horizontal-bar"
-			  chart-data="histdata" chart-labels="histlabels" >
-			</canvas>
-		</md-card>
--->
 	</div>
 	
 	<div layout="column" flex="30">
@@ -73,7 +65,7 @@
 					<tbody md-body>
 						<tr md-row md-auto-select ng-repeat="label in subdata.header track by $index">
 							<td md-cell style="font-weight: bold;"><span>{{label}}</span></td>
-							<td md-cell style="text-align: right;"><span>{{subdata.items[0][$index]}}</span></td>
+							<td md-cell style="text-align: right;"><span>{{subdata.items[$index]}}</span></td>
 						</tr>
 					</tbody>
 	    		</table>			    
@@ -91,10 +83,6 @@
 			</md-select>
 		</md-card-title>
 		
-		<div ng-if="ctrl.sending" style="text-align: center; color: cadetblue;">
-        	<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-    	</div>
-		
 		<md-card-content>
 			<p class="smaller-text">
 				<span class="fa-stack">
@@ -105,6 +93,11 @@
 					Ticks in the plot correspond to about 30 million bases
 				</span>
 			</p>
+			
+			<div ng-if="ctrl.sending" style="text-align: center; color: cadetblue;">
+        		<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    		</div>
+			
 		   	<div style="font-size: 0.5em;" id="biocircos"></div>
 		</md-card-content>
 	</md-card>
