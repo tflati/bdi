@@ -1,5 +1,5 @@
 <section style="padding: 0% 5% 0% 5%;">
-	<p>{{ctrl.info.long_description}}</p>
+	<p ng-bind-html="ctrl.info.long_description"></p>
 		
 	<form ng-submit="ctrl.send_query()">
 	
