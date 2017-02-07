@@ -13,7 +13,7 @@
 			"image": "logo_negri.png"
 		}
 	],
-	"long_description": "SFGdb is a database designed to provide access to predictions and annotations of Somatic Fusion Genes detected from paired-end RNA-sequencing data. Fusion analysis has been performed using the FusionCatcher algorithm on 935 tumor cell lines available on TCGA repository.",
+	"long_description": "SFGdb is a database designed to provide access to predictions and annotations of Somatic Fusion Genes detected from paired-end RNA-sequencing data. Fusion analysis has been performed using the FusionCatcher algorithm on 935 tumor cell lines available on TCGA repository with hg38 as reference genome.",
 	"links": {
 		"statistics_all": "http://localhost/api/statistics_all/",
 		"statistics_by_chromosome": "http://localhost/api/get_distribution/Chromosome/Fusion/",
@@ -57,6 +57,37 @@
 	}, {
 		"name": "Contact"
 	}],
+	"statistics": [
+		[
+			{
+				"width": "30%",
+				"type": "table",
+				"data": "http://localhost/api/get_distribution/Gene/Fusion/1000/ASC/",
+				"title": "Distribution of fusion events across genes",
+				"info": "http://localhost/api//Gene/Fusion/"
+			},
+			{
+				"width": "70%",
+				"type": "chart-bar",
+				"data": "http://localhost/api/get_distribution/CellLine/Fusion/50/",
+				"title": "Distribution of fusion events across cell lines"
+			}
+		],
+		[
+			{
+				"width": "30%",
+				"type": "chart-pie",
+				"data": "http://localhost/api/get_distribution/Chromosome/Fusion/",
+				"title": "Distribution of fusion events across chromosomes"
+			},
+			{
+				"width": "70%",
+				"type": "chart-bar",
+				"data": "http://localhost/api/get_distribution/Disease/CellLine/100/DESC/",
+				"title": "Distribution of diseases across cell lines"
+			}
+		]
+	],
 	"forms": [
 		{
 		"name": "search_for_cell_line",
