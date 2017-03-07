@@ -67,7 +67,7 @@
 						"width": "33%",
 						"elements": [
 							{
-								"type": "table",
+								"type": "two-column-table",
 								"data": {
 									"url": "http://localhost/api/statistics_all/"
 								}

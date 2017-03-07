@@ -14,6 +14,23 @@
 		
 	 </table>
 </div>
+
+<div ng-if="type == 'two-column-table'" style="max-height: 300px; overflow: auto;">
+	<table md-table md-row-select multiple>
+		<tbody md-body>
+			<thead md-head>
+				<tr md-row>
+					<th md-column ng-repeat="label in subdata.labels"><span>{{label}}</span></th>
+				</tr>
+			</thead>
+			<tr md-row md-auto-select ng-repeat="label in subdata.header track by $index">
+				<td md-cell style="font-weight: bold;"><span>{{label}}</span></td>
+				<td md-cell style="text-align: right;"><span>{{subdata.items[0][$index]}}</span></td>
+			</tr>
+		</tbody>
+		
+	 </table>
+</div>
 			
 <div ng-if="type == 'list'" style="max-height: 300px; overflow: auto;">
 	<table md-table md-row-select multiple>

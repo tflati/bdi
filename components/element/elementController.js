@@ -19,14 +19,12 @@ app.controller("elementController", function($scope, $http){
 			function(response)
     		{
 				$scope.sending = false;
-				console.log("SUCCESS IN GETTING DATA FROM " + url);
-				console.log(response.data);
+				console.log("SUCCESS IN GETTING DATA FROM " + url, response.data);
 				$scope.subdata = response.data.details;
 			},
 			function myError(response) {
 				$scope.sending = false;
-				console.log(response);
-            	console.log("ERROR IN GETTING DATA FROM " + url);
+            	console.log("ERROR IN GETTING DATA FROM " + url, response);
 			}
 		);
 	};

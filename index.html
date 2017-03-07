@@ -109,8 +109,8 @@ md-menu button {
 
 			var app = angular.module( 'app', [ 'ngMaterial', 'ngSanitize', 'chart.js', 'md.data.table'] );
 			
-			app.run(['$templateCache', function ( $templateCache ) {
-				    $templateCache.removeAll(); }]);
+// 			app.run(['$templateCache', function ( $templateCache ) {
+// 				    $templateCache.removeAll(); }]);
 			
 			app.config(function($mdThemingProvider) {
 					$mdThemingProvider.theme('big-data-theme')
