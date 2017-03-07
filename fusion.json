@@ -1,6 +1,7 @@
 {
 	"title": "SFGdb Portal",
 	"description": "SFGdb: Somatic Fusion Genes database detected from paired-end RNA-sequencing TCGA data",
+	"long_description": "SFGdb is a database designed to provide access to predictions and annotations of Somatic Fusion Genes detected from paired-end RNA-sequencing data. Fusion analysis has been performed using the FusionCatcher algorithm on 935 tumor cell lines available on TCGA repository with hg38 as reference genome.",
 	"image": {
 		"src": "logo.png",
 		"percentage_width": "200"
@@ -13,7 +14,6 @@
 			"image": "logo_negri.png"
 		}
 	],
-	"long_description": "SFGdb is a database designed to provide access to predictions and annotations of Somatic Fusion Genes detected from paired-end RNA-sequencing data. Fusion analysis has been performed using the FusionCatcher algorithm on 935 tumor cell lines available on TCGA repository with hg38 as reference genome.",
 	"links": {
 		"statistics_all": "http://localhost/api/statistics_all/",
 		"statistics_by_chromosome": "http://localhost/api/get_distribution/Chromosome/Fusion/",
@@ -25,28 +25,28 @@
 			"url": "home"
 		}, {
 			"name": "Search",
-				"items": [{
-					"name": "Search for Cell line",
-					"url": "search_for_cell_line"
-				}, {
-					"name": "Search for Chromosome",
-					"url": "search_for_chromosome"
-				}, {
-					"name": "Search for Gene",
-					"url": "search_for_gene"
-				}, {
-					"name": "Search for Exon",
-					"url": "search_for_exon"
-				}, {
-					"name": "Search for Transcript",
-					"url": "search_for_transcript"
-				}, {
-					"name": "Search for Fusion information",
-					"url": "search_for_fusion"
-				}, {
-					"name": "Search Viruses",
-					"url": "search_for_viruses"
-				}]
+			"items": [{
+				"name": "Search for Cell line",
+				"url": "search_for_cell_line"
+			}, {
+				"name": "Search for Chromosome",
+				"url": "search_for_chromosome"
+			}, {
+				"name": "Search for Gene",
+				"url": "search_for_gene"
+			}, {
+				"name": "Search for Exon",
+				"url": "search_for_exon"
+			}, {
+				"name": "Search for Transcript",
+				"url": "search_for_transcript"
+			}, {
+				"name": "Search for Fusion information",
+				"url": "search_for_fusion"
+			}, {
+				"name": "Search Viruses",
+				"url": "search_for_viruses"
+			}]
 	}, {
 		"name": "Documents & Downloads",
 		"url": "downloads",
@@ -57,36 +57,161 @@
 	}, {
 		"name": "Contact"
 	}],
-	"statistics": [
-		[
-			{
-				"width": "30%",
-				"type": "table",
-				"data": "http://localhost/api/get_distribution/Gene/Fusion/1000/ASC/",
-				"title": "Distribution of fusion events across genes",
-				"info": "http://localhost/api//Gene/Fusion/"
-			},
-			{
-				"width": "70%",
-				"type": "chart-bar",
-				"data": "http://localhost/api/get_distribution/CellLine/Fusion/50/",
-				"title": "Distribution of fusion events across cell lines"
-			}
-		],
-		[
-			{
-				"width": "30%",
-				"type": "chart-pie",
-				"data": "http://localhost/api/get_distribution/Chromosome/Fusion/",
-				"title": "Distribution of fusion events across chromosomes"
-			},
-			{
-				"width": "70%",
-				"type": "chart-bar",
-				"data": "http://localhost/api/get_distribution/Disease/CellLine/100/DESC/",
-				"title": "Distribution of diseases across cell lines"
-			}
-		]
+	"pages": [
+		{
+			"title": "main",
+			"elements": [
+				[
+					{
+						"title": "Global summary",
+						"width": "33%",
+						"elements": [
+							{
+								"type": "table",
+								"data": {
+									"url": "http://localhost/api/statistics_all/"
+								}
+							}
+						]
+					},
+					{
+						"title": "Fusion events by chromosome",
+						"subtitle": "Distribution of fusion events (y-axis) divided by chromosomes (x-axis)",
+						"width": "33%",
+						"elements": [
+							{
+								"type": "chart-pie",
+								"data": {
+									"url": "http://localhost/api/get_distribution/Chromosome/Fusion/",
+									"on-click": {
+										"action": "write",
+										"key": "chromosome"
+									}
+								}
+							}
+						],
+						"footer": {
+							"label": "auto",
+							"pluralize": "true",
+							"prefixFunction": "total"
+						}
+					},
+					{
+						"title": "Summary for chromosome",
+						"width": "33%",
+						"elements": [
+							{
+								"type": "table",
+								"data": {
+									"url": "http://localhost/api/get_single_distribution/Chromosome/CHROMOSOME",
+									"template": "CHROMOSOME",
+									"key": "chromosome"
+								}
+							}
+						],
+						"footer": {
+							"label": "auto",
+							"pluralize": "true",
+							"prefixFunction": "total"
+						}
+					},
+					{
+						"width": "30%",
+						"title": "Explore table",
+						"footer": {
+							"label": "auto",
+							"pluralize": "true",
+							"prefixFunction": "total"
+						},
+						"form": [
+							{
+								"fields": [
+									{
+										"label": "Select a sample",
+										"type": "select",
+										"values": "http://localhost/api/rap/get_list/Data/Sample",
+										"default": "Sample 1",
+										"on-change": [
+											{
+												"action": "write",
+												"key": "sample_id"
+											},
+											{
+												"action": "read",
+												"url": "http://localhost/api/rap/get_resource/TABLE/SAMPLE_ID",
+												"template": "SAMPLE_ID",
+												"key": "sample_file"										
+											}
+										]
+									}
+								]
+							}
+						],
+						"actions": [
+							{
+								"url": "http://localhost/api/rap/download/excel/",
+								"label": "Download as Excel",
+								"type": "button",
+								"icon": "fa-file-excel-o",
+								"modifiers": "fa-lg"
+							},
+							{
+								"url": "http://localhost/api/rap/download/csv/",
+								"label": "Download as CSV",
+								"type": "button",
+								"icon": "fa-table",
+								"modifiers": "fa-lg"
+							}
+						],
+						"elements": [
+							{
+								"type": "paginated-table",
+								"numbered": true,
+								"data": {
+									"url": "http://localhost/api/rap/explore/SAMPLE_FILE",
+									"template": "SAMPLE_FILE",
+									"key": "sample_file"
+								}
+							}
+						]
+					}
+				]
+			]
+		},
+		{
+			"title": "statistics",
+			"elements": [
+				[
+					{
+						"width": "30%",
+						"type": "table",
+						"data": "http://localhost/api/get_distribution/Gene/Fusion/1000/ASC/",
+						"title": "Distribution of fusion events across genes",
+						"info": "http://localhost/api//Gene/Fusion/"
+					},
+					{
+						"width": "70%",
+						"type": "chart-bar",
+						"data": "http://localhost/api/get_distribution/CellLine/Fusion/50/",
+						"title": "Distribution of fusion events across cell lines"
+					}
+				],
+				[
+					{
+						"width": "30%",
+						"type": "chart-pie",
+						"data": "http://localhost/api/get_distribution/Chromosome/Fusion/",
+						"title": "Distribution of fusion events across chromosomes"
+					},
+					{
+						"width": "70%",
+						"type": "chart-bar",
+						"data": "http://localhost/api/get_distribution/Disease/CellLine/100/DESC/",
+						"title": "Distribution of diseases across cell lines"
+					}
+				]
+			]
+		}
 	],
 	"forms": [
 		{
