@@ -83,7 +83,7 @@
 								"type": "chart-pie",
 								"data": {
 									"url": "http://localhost/api/get_distribution/Chromosome/Fusion/",
-									"on-click": {
+									"onClick": {
 										"action": "write",
 										"key": "chromosome"
 									}
@@ -105,7 +105,8 @@
 								"data": {
 									"url": "http://localhost/api/get_single_distribution/Chromosome/CHROMOSOME",
 									"template": "CHROMOSOME",
-									"key": "chromosome"
+									"key": "chromosome",
+									"value": "1"
 								}
 							}
 						],
@@ -114,9 +115,11 @@
 							"pluralize": "true",
 							"prefixFunction": "total"
 						}
-					},
+					}
+				],
+				[
 					{
-						"width": "30%",
+						"width": "100%",
 						"title": "Explore table",
 						"footer": {
 							"label": "auto",
@@ -175,7 +178,7 @@
 							}
 						]
 					}
-				]
+				]				
 			]
 		},
 		{
@@ -183,31 +186,55 @@
 			"elements": [
 				[
 					{
-						"width": "30%",
-						"type": "table",
-						"data": "http://localhost/api/get_distribution/Gene/Fusion/1000/ASC/",
 						"title": "Distribution of fusion events across genes",
-						"info": "http://localhost/api//Gene/Fusion/"
+						"width": "30%",
+						"elements": [
+							{
+								"type": "table",
+								"data":{
+									"url": "http://localhost/api/get_distribution/Gene/Fusion/1000/ASC/"
+								}
+							}
+						]
 					},
 					{
+						"title": "Distribution of fusion events across cell lines",
 						"width": "70%",
-						"type": "chart-bar",
-						"data": "http://localhost/api/get_distribution/CellLine/Fusion/50/",
-						"title": "Distribution of fusion events across cell lines"
+						"elements":
+						[
+							{
+								"type": "chart-bar",
+								"data": {
+									"url": "http://localhost/api/get_distribution/CellLine/Fusion/50/"
+								}
+							}
+						]
 					}
 				],
 				[
 					{
-						"width": "30%",
-						"type": "chart-pie",
-						"data": "http://localhost/api/get_distribution/Chromosome/Fusion/",
-						"title": "Distribution of fusion events across chromosomes"
+						"title": "Distribution of fusion events across chromosomes",
+						"width": "30",
+						"elements":[
+							{
+								"type": "chart-pie",
+								"data": {
+									"url": "http://localhost/api/get_distribution/Chromosome/Fusion/"
+								}
+							}
+						]
 					},
 					{
+						"title": "Distribution of diseases across cell lines",
 						"width": "70%",
-						"type": "chart-bar",
-						"data": "http://localhost/api/get_distribution/Disease/CellLine/100/DESC/",
-						"title": "Distribution of diseases across cell lines"
+						"elements": [
+							{
+								"type": "chart-bar",
+								"data": {
+									"url": "http://localhost/api/get_distribution/Disease/CellLine/100/DESC/"
+								}
+							}
+						]
 					}
 				]
 			]

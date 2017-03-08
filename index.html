@@ -119,29 +119,29 @@ md-menu button {
 					      .warnPalette('light-green');
 				});
 			
-			app.controller("dataController", function($http, $scope){
+// 			app.controller("dataController", function($http, $scope){
 					
-					$scope.sending = false;
+// 					$scope.sending = false;
 					
-					$scope.load_subdata = function(url){
+// 					$scope.load_subdata = function(url){
 						
-						$scope.subdata = [];
-						$scope.sending = true;
-						$http.get(url).then(function(response)
-                        		{
-									$scope.sending = false;
-									console.log("SUCCESS IN GETTING DATA FROM " + url);
-									console.log(response.data);
-									$scope.subdata = response.data.details;
-								},
-								function myError(response) {
-									$scope.sending = false;
-									console.log(response);
-				                	console.log("ERROR IN GETTING DATA FROM " + url);
-								}
-						);
-					};
-				});
+// 						$scope.subdata = [];
+// 						$scope.sending = true;
+// 						$http.get(url).then(function(response)
+//                         		{
+// 									$scope.sending = false;
+// 									console.log("SUCCESS IN GETTING DATA FROM " + url);
+// 									console.log(response.data);
+// 									$scope.subdata = response.data.details;
+// 								},
+// 								function myError(response) {
+// 									$scope.sending = false;
+// 									console.log(response);
+// 				                	console.log("ERROR IN GETTING DATA FROM " + url);
+// 								}
+// 						);
+// 					};
+// 				});
 			
 			app.controller("controller", function($http, $scope, $mdDialog, $timeout, $mdSidenav){
 
@@ -668,6 +668,7 @@ md-menu button {
 
 		</script>
 		
+		<script src="components/services/global.js" type="text/javascript"></script>
 		<script src="components/button/buttonDirective.js" type="text/javascript"></script>
 		<script src="components/button/buttonController.js" type="text/javascript"></script>
 		<script src="components/element/elementController.js" type="text/javascript"></script>
@@ -679,13 +680,13 @@ md-menu button {
 <body style="margin: 0px; font-size: 1.2em;" ng-app="app"
 	md-theme="big-data-theme">
 
-	<card ng-controller="cardController" ng-init="init({title: 'Title', type: 'PieChart', footer: {label: 'Footer label', data: [1, 2, 3, 4, 5], pluralize: true, prefixFunction: 'total'}})"></card>
+<!-- 	<card ng-controller="cardController" ng-init="init({title: 'Title', type: 'PieChart', footer: {label: 'Footer label', data: [1, 2, 3, 4, 5], pluralize: true, prefixFunction: 'total'}})"></card> -->
 	
 	<div ng-controller="controller as ctrl" layout="column" ng-cloak>
 		
 		<div ng-repeat="page in ctrl.info.pages">
-			<section layout="row" flex="100" ng-repeat="row in page.elements">
-				<card ng-repeat="card in row" ng-controller="cardController" ng-init="init(card)">
+			<section style="width: 80%; margin-left: auto; margin-right: auto;" layout="row" flex="100" ng-repeat="row in page.elements">
+				<card flex="{{width}}" ng-repeat="card in row" ng-controller="cardController" ng-init="init(card)">
 				</card>
 			</section>
 		</div>
