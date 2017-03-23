@@ -1,21 +1,36 @@
 <div ng-if="type == 'table'" style="max-height: 300px; overflow: auto;">
 
-<!-- 	<div style="background-color: green; width: 200px; height: 200px;" ng-click="myClick()"></div> -->
-
 	<table md-table md-row-select multiple>
 		<tbody md-body>
 			<thead md-head>
 				<tr md-row>
-					<th md-column ng-repeat="label in subdata.labels"><span>{{label}}</span></th>
+					<th md-column ng-repeat="label in subdata.header track by $index">
+						<span>{{label}}</span>
+					</th>
 				</tr>
 			</thead>
-			<tr md-row md-auto-select ng-repeat="label in subdata.header track by $index">
-				<td md-cell style="font-weight: bold;"><span>{{label}}</span></td>
-				<td md-cell style="text-align: right;"><span>{{subdata.items[$index]}}</span></td>
+			<tr md-row md-auto-select ng-repeat="item in subdata.items track by $index">
+				<td md-cell ng-repeat="field in item track by $index">
+					<span>{{field}}</span>
+				</td>
 			</tr>
 		</tbody>
 		
 	 </table>
+
+<!-- 	<table md-table md-row-select multiple> -->
+<!-- 		<tbody md-body> -->
+<!-- 			<thead md-head> -->
+<!-- 				<tr md-row> -->
+<!-- 					<th md-column ng-repeat="label in subdata.labels"><span>{{label}}</span></th> -->
+<!-- 				</tr> -->
+<!-- 			</thead> -->
+<!-- 			<tr md-row md-auto-select ng-repeat="label in subdata.header track by $index"> -->
+<!-- 				<td md-cell style="font-weight: bold;"><span>{{label}}</span></td> -->
+<!-- 				<td md-cell style="text-align: right;"><span>{{subdata.items[$index]}}</span></td> -->
+<!-- 			</tr> -->
+<!-- 		</tbody> -->
+<!-- 	 </table> -->
 </div>
 
 <div ng-if="type == 'two-column-table'" style="max-height: 300px; overflow: auto;">

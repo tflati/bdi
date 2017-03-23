@@ -201,6 +201,12 @@ md-menu button {
 						console.log(self.info.forms);
 					};
 					
+					self.get_current_page_data = function(){
+						for(var i=0; i<self.info.pages.length; i++)
+							if(self.info.pages[i].title == self.page.replace(".html", "").replace("templates/", ""))
+								return self.info.pages[i];
+					};
+					
 					self.load_form = function(group, option){
 						
 						// Remove previous form inputs...
@@ -432,28 +438,28 @@ md-menu button {
 						);
 					};
 					
-					$http.get('fusion.json').then(function(response) {
+					$http.get('config.json').then(function(response) {
                         self.info = response.data;
                         self.info.image.percentage_width_original = self.info.image.percentage_width;
                         console.log(self.info);
                         
-                        self.load_data(self.info.links.statistics_all);
-                        self.clicked_chromosome = "1"
-                        self.load_subdata(self.info.links.statistics_single_chromosome + self.clicked_chromosome + "/");
+//                         self.load_data(self.info.links.statistics_all);
+//                         self.clicked_chromosome = "1"
+//                         self.load_subdata(self.info.links.statistics_single_chromosome + self.clicked_chromosome + "/");
                         
-                        $http.get(self.info.links.statistics_by_chromosome).then(function(response)
-                        		{
-									console.log("SUCCESS IN GETTING STATISTICS BY CHROMOSOME");
-									console.log(response.data);
-									$scope.pielabels = response.data.details.header; 
-									$scope.piedata = response.data.details.items;
-									$scope.pieheader = response.data.details.labels;
-								},
-								function myError(response) {
-									console.log(response);
-				                	console.log("ERROR IN GETTING STATISTICS CHROMOSOME");
-								}
-						);
+//                         $http.get(self.info.links.statistics_by_chromosome).then(function(response)
+//                         		{
+// 									console.log("SUCCESS IN GETTING STATISTICS BY CHROMOSOME");
+// 									console.log(response.data);
+// 									$scope.pielabels = response.data.details.header; 
+// 									$scope.piedata = response.data.details.items;
+// 									$scope.pieheader = response.data.details.labels;
+// 								},
+// 								function myError(response) {
+// 									console.log(response);
+// 				                	console.log("ERROR IN GETTING STATISTICS CHROMOSOME");
+// 								}
+// 						);
                         
                         for(var f=0; f<self.info.forms.length; f++)
                         {
@@ -562,109 +568,13 @@ md-menu button {
                             );
                         }
                         
-                        self.show_circos(self.info.links.circos_url + self.circos.value + "/");
+//                         self.show_circos(self.info.links.circos_url + self.circos.value + "/");
                         
                 	}, function(response){
                 		console.log("ERROR GETTING THE CONFIG FILE");
                 	});
-					
-					$scope.toggle = function() {
-					      return $mdSidenav('left').toggle();
-					    }
-					
-				  $scope.chartlabels = ["January", "February", "March", "April", "May", "June", "July"];
-				  $scope.chartseries = ['Series A', 'Series B'];
-				  $scope.chartdata = [
-					[65, 59, 80, 81, 56, 55, 40],
-					[28, 48, 40, 19, 86, 27, 90]
-				  ];
-				  $scope.onClick = function (points, evt) {
-					console.log(points, evt);
-				  };
-				  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
-				  $scope.options = {
-					scales: {
-					  yAxes: [
-						{
-						  id: 'y-axis-1',
-						  type: 'linear',
-						  display: true,
-						  position: 'left'
-						},
-						{
-						  id: 'y-axis-2',
-						  type: 'linear',
-						  display: true,
-						  position: 'right'
-						}
-					  ]
-					}
-				  };
-
-// 				  $scope.pielabels = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"];
-// 				  $scope.piedata = [12823, 9119, 14449, 9995, 11638, 13323, 3988, 2985, 3852, 23751, 3929, 5879, 6796, 7609, 10341, 1360, 14395, 4863, 136, 1624, 4623, 2521, 4690, 5949];
-				  $scope.pieclick = function(evt)
-				  {
-					    var chr = $scope.pielabels[evt[0]._index];
-					    var chr_for_query = chr.replace("chr", "").trim();
-					    self.clicked_chromosome = chr_for_query;
-					    self.load_subdata(self.info.links.statistics_single_chromosome + chr_for_query + "/");
-					    
-// 						$mdDialog.show(
-// 							  $mdDialog.alert()
-// 								.clickOutsideToClose(true)
-// 								.title('Cromosoma: ' + chr)
-// 								.textContent('Questa funzione non è stata ancora implementata.')
-// 								.ariaLabel('Chromosome info')
-// 								.ok('Ho capito!')
-// 								.openFrom({
-// 								  top: -50,
-// 								  width: 30,
-// 								  height: 80
-// 								})
-// 								.closeTo({
-// 								  left: 1500
-// 								})
-// 							);
-				  };
-				  $scope.pieoptions = {fontSize: 200};
-
-				  $scope.histlabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-				  $scope.histseries = ['Series A', 'Series B'];
-			      $scope.histdata = [
-					  [65, 59, 80, 81, 56, 55, 40],
-					  [28, 48, 40, 19, 86, 27, 90]
-					];
-
-				  this.settings = {
-					  printLayout: true,
-					  showRuler: true,
-					  showSpellingSuggestions: true,
-					  presentationMode: 'edit'
-					};
-
-					this.sampleAction = function(name, ev) {
-					  $mdDialog.show($mdDialog.alert()
-						.title(name)
-						.textContent('You triggered the "' + name + '" action')
-						.ok('Great')
-						.targetEvent(ev)
-					  );
-					};
 				}// End of controller
 			);
-			
-// 			app.directive("chartType", function() {
-// 			    return {
-// 			    	restrict: 'A',
-// 			    	link: function(scope, elem, attrs){
-			    		
-// 			    	},
-// 			    	template: function(tElement, tAttrs){
-// 			    		return "<"+tAttrs.chartType+"></"+tAttrs.chartType+">";
-// 			    	}
-// 			    };
-// 			});
 
 		</script>
 		
