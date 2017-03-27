@@ -278,6 +278,7 @@ md-menu button {
 						}
 						
 						if(isForm) {
+							console.log("Going to render form");
 							self.form_results = [];
 							self.page = 'templates/form.html';
 							self.info.image.percentage_width = self.info.image.percentage_width_original / 2;
@@ -285,6 +286,8 @@ md-menu button {
 						}
 						else {
 							if(url == "home") url = "main";
+							
+							console.log("Going to render page");
 							
 							self.page = 'templates/'+url+'.html';
 							
@@ -388,8 +391,8 @@ md-menu button {
 						$http.get(self.form.submit.url + args.join("/") + "/").then(function(response) {
 							self.sending = false;
 							console.log("QUERY SUCCESS", response);
-							self.form_results = response.data.rows;
-
+							
+							self.form_results = response.data;
 							console.log("HEADER", self.form_results.header);
 							
 						}, function(response){
