@@ -112,7 +112,12 @@ md-menu button {
 // 			app.run(['$templateCache', function ( $templateCache ) {
 // 				    $templateCache.removeAll(); }]);
 			
-			app.config(function($mdThemingProvider) {
+			app.config(function($mdThemingProvider, $httpProvider) {
+				
+				$httpProvider.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+				$httpProvider.defaults.xsrfCookieName = 'csrftoken';
+				$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+				
 					$mdThemingProvider.theme('big-data-theme')
 					      .primaryPalette('amber')
 					      .accentPalette('red')
@@ -380,25 +385,42 @@ md-menu button {
 							var field = self.form.fields[i];
 							var value = field.value;
 							console.log("VALUE", value)
-							if (i == 0 && (value == undefined || value == "")) continue;
-                                                        args.push(value);
+							if (value == undefined || value == "") continue;
+							else args.push(value);
 						}
 						
 						console.log("ARGS", args);
 						
 						self.sending = true;
 						if( ! self.form.submit.url.endsWith("/") ) self.form.submit.url = self.form.submit.url  + "/";
-						$http.get(self.form.submit.url + args.join("/") + "/").then(function(response) {
-							self.sending = false;
-							console.log("QUERY SUCCESS", response);
-							
-							self.form_results = response.data;
-							console.log("HEADER", self.form_results.header);
-							
-						}, function(response){
-							self.sending = false;
-							console.log("ERROR WHILE SENDING QUERY...", response);
-						});
+						
+						if(self.form.submit.type == "POST")
+						{
+							console.log("SENDING AJAX VIA POST", args);
+							$http.post(self.form.submit.url, args)
+							.then(function(response) {
+								self.sending = false;
+								console.log("QUERY POST SUCCESS", response);
+								self.form_results = response.data;
+								
+							}, function(response){
+								self.sending = false;
+								console.log("ERROR WHILE SENDING QUERY...", response);
+							});
+						}
+						else
+						{
+							$http.get(self.form.submit.url + args.join("/") + "/")
+							.then(function(response) {
+								self.sending = false;
+								console.log("QUERY GET SUCCESS", response);
+								self.form_results = response.data;
+								
+							}, function(response){
+								self.sending = false;
+								console.log("ERROR WHILE SENDING QUERY...", response);
+							});
+						}
 					};
 					
 					self.ajax2forms = [];

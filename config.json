@@ -23,8 +23,11 @@
 				"name": "Search by region",
 				"url": "search_by_region"
 			}, {
-				"name": "Search by gene",
-				"url": "search_by_gene"
+				"name": "Search by gene type",
+				"url": "search_by_gene_type"
+			}, {
+				"name": "Search by gene ID",
+				"url": "search_by_gene_name"
 			}, {
 				"name": "Search by cultivars",
 				"url": "search_by_cultivar"
@@ -105,16 +108,24 @@
 			"value": true
 		}]
 	}, {
-		"name": "search_by_gene",
+		"name": "search_by_gene_type",
 		"submit": {
 			"label": "Search",
-			"url": "http://localhost/api/peach/search_by_gene/"
+			"url": "http://localhost/api/peach/search_by_gene_type/"
 		},
 		"fields": [{
 			"label": "Gene type",
 			"type": "select",
 			"values": "http://localhost/api/peach/gene_types/"
-		},{
+		}
+		]
+	}, {
+		"name": "search_by_gene_name",
+		"submit": {
+			"label": "Search",
+			"url": "http://localhost/api/peach/search_by_gene_name/"
+		},
+		"fields": [{
 			"label": "Gene name",
 			"type": "text",
 			"values": "http://localhost/api/peach/genes/"
@@ -124,7 +135,8 @@
 		"name": "search_by_cultivar",
 		"submit": {
 			"label": "Search",
-			"url": "http://localhost/api/peach/search_by_cultivar/"
+			"url": "http://localhost/api/peach/search_by_cultivar/",
+			"type": "POST"
 		},
 		"fields": [{
 			"label": "Cultivar name(s)",
