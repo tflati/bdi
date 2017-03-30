@@ -271,7 +271,7 @@
 				],
 				[
 					{
-						"title": "Dataset overview (persica)",
+						"title": "Dataset overview (peach)",
 						"width": "20%",
 						"actions": [
 							{
@@ -301,7 +301,7 @@
 				],
 				[
 					{
-						"title": "Dataset overview (wild)",
+						"title": "Dataset overview (wild-related species)",
 						"width": "100%",
 						"actions": [
 							{
