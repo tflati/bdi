@@ -100,12 +100,12 @@
 		{
 			"label": "Include SNP",
 			"type": "checkbox",
-			"value": false
+			"value": "false"
 		},
 		{
 			"label": "Include INDELS",
 			"type": "checkbox",
-			"value": true
+			"value": "true"
 		}]
 	}, {
 		"name": "search_by_gene_type",
@@ -127,7 +127,7 @@
 		},
 		"fields": [{
 			"label": "Gene name",
-			"type": "text",
+			"type": "autocomplete",
 			"values": "http://localhost/api/peach/genes/"
 		}
 		]

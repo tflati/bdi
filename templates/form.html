@@ -4,30 +4,52 @@
 	<form ng-submit="ctrl.send_query()">
 	
 		<div ng-repeat="field in ctrl.form.fields track by $index">
-			<md-input-container class="md-input-has-placeholder">
-				<label style="min-width: 400px;" ng-if="field.type != 'checkbox'" ng-bind="field.label"></label>
-				
-				<input ng-if="field.type != 'choice' && field.type != 'select' && field.type != 'checkbox'" placeholder="{{field.placeholder}}" ng-model="field.value" ng-value="{{field.default}}" type="{{field.type}}"/>
-				
-				<md-select ng-model="field.value" ng-if="field.type == 'select' && (!field.multiple || field.multiple == false)" ng-model-options="{trackBy: '$value'}">
-					<md-option ng-value="value" ng-repeat="value in field.values track by $index">{{value}}</md-option>
-				</md-select>
-				
-				<md-select multiple ng-model="field.value" ng-if="field.type == 'select' && field.multiple && field.multiple == true" ng-model-options="{trackBy: '$value'}">
-					<md-option ng-value="value" ng-repeat="value in field.values track by $index">{{value}}</md-option>
-				</md-select>
-				
-				<md-checkbox ng-if="field.type == 'checkbox'" ng-model="field.value" ng-checked="{{field.checked}}">
-					{{field.label}}
-				</md-checkbox>
-			</md-input-container>
+			<div ng-if="field.type != 'autocomplete'">
+				<md-input-container class="md-input-has-placeholder">
+					<label style="min-width: 400px;" ng-if="field.type != 'checkbox'" ng-bind="field.label"></label>
+					
+					<input ng-if="field.type != 'choice' && field.type != 'select' && field.type != 'autocomplete' && field.type != 'checkbox'" placeholder="{{field.placeholder}}" ng-model="field.value" ng-value="{{field.default}}" type="{{field.type}}"/>
+					
+					<md-select ng-model="field.value" ng-if="field.type == 'select' && (!field.multiple || field.multiple == false)" ng-model-options="{trackBy: '$value'}">
+						<md-option ng-value="value" ng-repeat="value in field.values track by $index">{{value}}</md-option>
+					</md-select>
+					
+					<md-select multiple ng-model="field.value" ng-if="field.type == 'select' && field.multiple && field.multiple == true" ng-model-options="{trackBy: '$value'}">
+						<md-option ng-value="value" ng-repeat="value in field.values track by $index">{{value}}</md-option>
+					</md-select>
+					
+					<md-checkbox ng-if="field.type == 'checkbox'" ng-model="field.value" ng-checked="{{field.checked}}">
+						{{field.label}}
+					</md-checkbox>
+					
+					<md-radio-group>
+						<md-radio-button ng-click="ctrl.load_form(field, value)" ng-if="field.type == 'choice' && field.subtype == 'radio'" ng-repeat="value in field.values track by $index" name="{{field.group_id}}" ng-model="field.value" ng-checked="{{value.selected}}" ng-value="value.label" type="radio" aria-label="Multi-choice">
+							{{value.label}}
+						</md-radio-button>
+					</md-radio-group>
+				</md-input-container>
+			</div>
+					      
+			<div flex="30" ng-if="field.type == 'autocomplete'" ng-controller="autocompleteController as actrl">
+				<md-content class="md-padding">
+					<label style="min-width: 400px;" ng-if="field.type != 'checkbox'" ng-bind="field.label"></label>
+					<md-autocomplete
+				          md-selected-item="field.value"
+				          md-search-text="actrl.searchText"
+				          md-items="item in actrl.querySearch(actrl.searchText)"
+				          md-item-text="item"
+				          md-min-length="0"
+				        >
+				        <md-item-template>
+				          <span md-highlight-text="actrl.searchText" md-highlight-flags="^i">{{item}}</span>
+				        </md-item-template>
+				        <md-not-found>
+				          No items matching "{{actrl.searchText}}" were found.
+				        </md-not-found>
+				      </md-autocomplete>
+				</md-content>
+			</div>
 			
-			<md-radio-group>
-				<md-radio-button ng-click="ctrl.load_form(field, value)" ng-if="field.type == 'choice' && field.subtype == 'radio'" ng-repeat="value in field.values track by $index" name="{{field.group_id}}" ng-model="field.value" ng-checked="{{value.selected}}" ng-value="value.label" type="radio" aria-label="Multi-choice">
-					{{value.label}}
-				</md-radio-button>
-				
-			</md-radio-group>
 		</div>
 		<md-button ng-click="ctrl.send_query()" class="md-primary md-raised">{{ctrl.form.submit.label}}</md-button>
 <!-- 		<input type="submit" ng-value="ctrl.form.submit.label"> -->
@@ -64,5 +86,5 @@
 				</tbody>
 			</table>
 		</md-card-content>
-	</md-card>	
+	</md-card>
 </section>
