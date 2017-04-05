@@ -54,7 +54,7 @@
 			"name": "JBrowse",
 			"items": [{
 				"name": "Visualize cultivar's variant",
-				"url": "http://galaxy.cineca.it/jbrowse/JBrowse-1.12.1/index.html?data=data%2FpersicaV2&loc=Pp01%3A22694568..22709370&tracks=DNA%2CMy%20Genes%2CMySNPs%2CMyIndels&highlight="
+				"url": "http://localhost/jbrowse/JBrowse-1.12.1/index.html?data=data%2FpersicaV2&loc=Pp01%3A22694568..22709370&tracks=DNA%2CMy%20Genes%2CMySNPs%2CMyIndels&highlight="
 			}, {
 				"name": "Load external VCF",
 				"url": "load_external_vcf"
@@ -75,12 +75,12 @@
 		"name": "search_by_region",
 		"submit": {
 			"label": "Search",
-			"url": "http://galaxy.cineca.it/api/peach/search_by_chromosome/"
+			"url": "http://localhost/api/peach/search_by_chromosome/"
 		},
 		"fields": [{
 			"label": "Chromosome",
 			"type": "select",
-			"values": "http://galaxy.cineca.it/api/peach/chromosomes/",
+			"values": "http://localhost/api/peach/chromosomes/",
 			"placeholder": "Pp01",
 			"default": "Pp01",
 			"required": "true"
@@ -111,37 +111,37 @@
 		"name": "search_by_gene_type",
 		"submit": {
 			"label": "Search",
-			"url": "http://galaxy.cineca.it/api/peach/search_by_gene_type/"
+			"url": "http://localhost/api/peach/search_by_gene_type/"
 		},
 		"fields": [{
 			"label": "Gene type",
 			"type": "select",
-			"values": "http://galaxy.cineca.it/api/peach/gene_types/"
+			"values": "http://localhost/api/peach/gene_types/"
 		}
 		]
 	}, {
 		"name": "search_by_gene_name",
 		"submit": {
 			"label": "Search",
-			"url": "http://galaxy.cineca.it/api/peach/search_by_gene_name/"
+			"url": "http://localhost/api/peach/search_by_gene_name/"
 		},
 		"fields": [{
 			"label": "Gene name",
 			"type": "autocomplete",
-			"values": "http://galaxy.cineca.it/api/peach/genes/"
+			"values": "http://localhost/api/peach/genes/"
 		}
 		]
 	}, {
 		"name": "search_by_cultivar",
 		"submit": {
 			"label": "Search",
-			"url": "http://galaxy.cineca.it/api/peach/search_by_cultivar/",
+			"url": "http://localhost/api/peach/search_by_cultivar/",
 			"type": "POST"
 		},
 		"fields": [{
 			"label": "Cultivar name(s)",
 			"type": "select",
-			"values": "http://galaxy.cineca.it/api/peach/cultivars/",
+			"values": "http://localhost/api/peach/cultivars/",
 			"multiple": true,
 			"required": "true"
 		}]
@@ -150,14 +150,14 @@
 		"fields": [{
 			"label": "Select one or more cultivars",
 			"type": "select",
-			"values": "http://galaxy.cineca.it/api/peach/snp_cultivar",
+			"values": "http://localhost/api/peach/snp_cultivar",
 			"placeholder": "Any",
 			"default": "...",
 			"required": "true"
 		}, {
 			"label": "Chromosome",
 			"type": "text",
-			"values": "http://galaxy.cineca.it/api/peach/chromosomes/snp",
+			"values": "http://localhost/api/peach/chromosomes/snp",
 			"placeholder": "14",
 			"default": "14",
 			"required": "true"
@@ -178,7 +178,7 @@
 			"fields": [{
 				"label": "Chromosome",
 				"type": "text",
-				"values": "http://galaxy.cineca.it/api/peach/chromosomes/indel",
+				"values": "http://localhost/api/peach/chromosomes/indel",
 				"placeholder": "14",
 				"default": "14",
 				"required": "true"
@@ -200,7 +200,7 @@
 			"fields": [{
 				"label": "Gene name",
 				"type": "text",
-				"values": "http://galaxy.cineca.it/api/peach/Gene/indel",
+				"values": "http://localhost/api/peach/Gene/indel",
 				"placeholder": "...",
 				"default": "...",
 				"required": "true"
@@ -210,7 +210,7 @@
 			"fields": [{
 				"label": "Please insert information or annotation",
 				"type": "text",
-				"values": "http://galaxy.cineca.it/api/peach/indelinfo",
+				"values": "http://localhost/api/peach/indelinfo",
 				"placeholder": "...",
 				"default": "...",
 				"required": "true"
@@ -220,14 +220,14 @@
 			"fields": [{
 				"label": "Gene name",
 				"type": "text",
-				"values": "http://galaxy.cineca.it/api/peach/snp_cultivar",
+				"values": "http://localhost/api/peach/snp_cultivar",
 				"placeholder": "...",
 				"default": "...",
 				"required": "true"
 			}, {
 				"label": "Chromosome",
 				"type": "text",
-				"values": "http://galaxy.cineca.it/api/peach/chromosomes/indel",
+				"values": "http://localhost/api/peach/chromosomes/indel",
 				"placeholder": "14",
 				"default": "14",
 				"required": "true"
@@ -248,7 +248,7 @@
 		}],
 		"submit": {
 			"label": "Submit",
-			"url": "http://galaxy.cineca.it/api/peach/chromosomes/"
+			"url": "http://localhost/api/peach/chromosomes/"
 		}
 	}],
 	"pages": [
@@ -257,13 +257,58 @@
 			"elements": [
 				[
 					{
+						"title": "Gene density by chromosome",
+						"width": "100",
+						"elements": [
+							{
+								"type": "chart-bar",
+								"data": {
+									"url": "http://localhost/api/peach/load_distribution/0/",
+									"onClick": {
+										"action": "write",
+										"key": "chromosome"
+									}
+								}
+							}
+						]
+					}
+				],
+				[
+					{
+						"title": "Gene density by region",
+						"width": "100",
+						"elements": [
+							{
+								"type": "slider",
+								"label": "Select the window of interest for this chromosome",
+								"data": {
+									"min": "0",
+									"max": "1000000",
+									"value": "500000",
+									"step": "50000"
+								}
+							},
+							{
+								"type": "chart-bar",
+								"data": {
+									"url": "http://localhost/api/peach/load_distribution/CHROMOSOME/",
+									"template": "CHROMOSOME",
+									"key": "chromosome",
+									"value": "1"
+								}
+							}
+						]
+					}
+				],
+				[
+					{
 						"title": "Number of variants per cultivar",
 						"width": "33",
 						"elements": [
 							{
 								"type": "chart-pie",
 								"data": {
-									"url": "http://galaxy.cineca.it/api/peach/get_distribution/Cultivar/Variants/"
+									"url": "http://localhost/api/peach/get_distribution/Cultivar/Variants/"
 								}
 							}
 						]
@@ -275,7 +320,7 @@
 							{
 								"type": "table",
 								"data": {
-									"url": "http://galaxy.cineca.it/api/peach/get_total_stats/"
+									"url": "http://localhost/api/peach/get_total_stats/"
 								}
 							}
 						]
@@ -287,14 +332,14 @@
 						"width": "50",
 						"actions": [
 							{
-								"url": "http://galaxy.cineca.it/api/peach/download/excel/",
+								"url": "http://localhost/api/peach/download/excel/",
 								"label": "Download as Excel",
 								"type": "button",
 								"icon": "fa-file-excel-o",
 								"modifiers": "fa-lg"
 							},
 							{
-								"url": "http://galaxy.cineca.it/api/peach/download/csv/",
+								"url": "http://localhost/api/peach/download/csv/",
 								"label": "Download as CSV",
 								"type": "button",
 								"icon": "fa-table",
@@ -305,7 +350,7 @@
 							{
 								"type": "table",
 								"data": {
-									"url": "http://galaxy.cineca.it/api/peach/get_info_all_simple/persica/"
+									"url": "http://localhost/api/peach/get_info_all_simple/persica/"
 								}
 							}
 						]
@@ -315,14 +360,14 @@
 						"width": "50",
 						"actions": [
 							{
-								"url": "http://galaxy.cineca.it/api/peach/download/excel/",
+								"url": "http://localhost/api/peach/download/excel/",
 								"label": "Download as Excel",
 								"type": "button",
 								"icon": "fa-file-excel-o",
 								"modifiers": "fa-lg"
 							},
 							{
-								"url": "http://galaxy.cineca.it/api/peach/download/csv/",
+								"url": "http://localhost/api/peach/download/csv/",
 								"label": "Download as CSV",
 								"type": "button",
 								"icon": "fa-table",
@@ -333,7 +378,7 @@
 							{
 								"type": "table",
 								"data": {
-									"url": "http://galaxy.cineca.it/api/peach/get_info_all_simple/wild/"
+									"url": "http://localhost/api/peach/get_info_all_simple/wild/"
 								}
 							}
 						]
@@ -350,26 +395,26 @@
 						"width": "100",
 						"elements": [
 						{
-                                                                "type": "table",
-                                                                "data": {
-                                                                        "url": "http://galaxy.cineca.it/api/peach/get_info_all/persica/"
-                                                                }
-                                                        }
-                                                ]
+                                        "type": "table",
+                                        "data": {
+                                                "url": "http://localhost/api/peach/get_info_all/persica/"
+                                        }
+                                }
+                        ]
 					}
 				],
 				[
 					{
 						"title": "Dataset overview (wild-related species)",
-                                                "width": "100",
-                                                "elements": [
-                                                {
-                                                                "type": "table",
-                                                                "data": {
-                                                                        "url": "http://galaxy.cineca.it/api/peach/get_info_all/wild/"
-                                                                }
-                                                        }
-                                                ]
+                        "width": "100",
+                        "elements": [
+                        {
+                                        "type": "table",
+                                        "data": {
+                                                "url": "http://localhost/api/peach/get_info_all/wild/"
+                                        }
+                                }
+                        ]
 					}
 				]
 			]

@@ -83,7 +83,12 @@
 </div>
 
 <div>
-	<canvas ng-if="type == 'chart-bar'" class="chart chart-bar" chart-data="subdata.items" chart-labels="subdata.header">
+	<canvas ng-if="type == 'chart-bar'"
+		class="chart chart-bar"
+		chart-data="subdata.items"
+		chart-labels="subdata.header"
+		chart-click="onClick"
+		>
 	</canvas>
 <div>
 
@@ -116,4 +121,15 @@
 		md-total="{{query.total}}"
 		md-page-select>
 	</md-table-pagination>
+</div>
+
+<div ng-if="type == 'slider'">
+	<div>
+		<p style="display: inline-block;" ng-bind="label"></p>:
+		<span ng-bind="data_source.value"></span>
+	</div>
+	<md-slider-container>
+		<md-slider step="{{data_source.step}}" md-discrete class="md-primary" flex min="{{data_source.min}}" max="{{data_source.max}}" ng-model="data_source.value" aria-label="{{label}}">
+		</md-slider>
+	</md-slider-container>
 </div>
