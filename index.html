@@ -148,7 +148,7 @@ md-menu button {
 // 					};
 // 				});
 			
-			app.controller("controller", function($http, $scope, $mdDialog, $timeout, $mdSidenav){
+			app.controller("controller", function($http, $window, $scope, $mdDialog, $timeout, $mdSidenav){
 
 					self = this;
 					
@@ -294,6 +294,10 @@ md-menu button {
 							
 							console.log("Going to render page");
 							
+							if(url.startsWith("http://")){
+								$window.location.href = url;
+							}
+
 							self.page = 'templates/'+url+'.html';
 							
 							if(item.action) {
